@@ -3,10 +3,7 @@ package coop.bancocredicoop.omnited.service.ivr;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public interface NodeHandler {
-    /**
-     * El tipo de nodo que maneja, por ejemplo "outSimple", "inOpciones", etc.
-     */
-    String getType();
+    // String getType(); deprecate
 
     /**
      * Procesa el nodo invocado.
