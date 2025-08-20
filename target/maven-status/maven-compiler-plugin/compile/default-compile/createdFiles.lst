@@ -1,0 +1,7 @@
+coop/bancocredicoop/omnited/BasicApplication.class
+coop/bancocredicoop/omnited/utils/JsonCleaningService.class
+coop/bancocredicoop/omnited/service/ivr/DiagramaService.class
+coop/bancocredicoop/omnited/service/rabbit/RabbitMessageHandler.class
+coop/bancocredicoop/omnited/entity/IVR.class
+coop/bancocredicoop/omnited/service/rabbit/RabbitListenerService.class
+coop/bancocredicoop/omnited/handler/rabbit/IVRHandler.class

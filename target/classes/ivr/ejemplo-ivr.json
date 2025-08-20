@@ -1,0 +1,610 @@
+{
+  "nodes": [
+    {
+      "id": "start-node",
+      "type": "inicio",
+      "data": {
+        "label": "Inicio Bot"
+      },
+      "draggable": false,
+      "selectable": false
+    },
+    {
+      "id": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "type": "listaInteractivo",
+      "data": {
+        "selectedVars": [
+          "Tarjetas Credicoop",
+          "Gestión de Claves",
+          "Alta Digital",
+          "Promos y Beneficios",
+          "Inversiones",
+          "Préstamos",
+          "Seguros",
+          "Comunicar con Asesor"
+        ]
+      }
+    },
+    {
+      "id": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "type": "listaOpciones",
+      "data": {
+        "selectedVars": [
+          "1️⃣ Tarjetas en distribución",
+          "2️⃣ Denuncias por robo o extravío",
+          "3️⃣ Cuotificación",
+          "4️⃣ Volver al Menú Principal"
+        ],
+        "numeroIntentos": 3,
+        "optionsList": [
+          {
+            "id": 1,
+            "text": "1️⃣ Tarjetas en distribución"
+          },
+          {
+            "id": 2,
+            "text": "2️⃣ Denuncias por robo o extravío"
+          },
+          {
+            "id": 3,
+            "text": "3️⃣ Cuotificación"
+          },
+          {
+            "id": 4,
+            "text": "4️⃣ Volver al Menú Principal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+      "type": "salidaSimple",
+      "data": {
+        "text": "👋 Hola, soy tu asistente virtual, ¡estoy para ayudarte! ¿Viste que no tengo la tilde verde?  Significa que es mi número NO es oficial."
+      }
+    },
+    {
+      "id": "cfc47feb-6cc3-4e30-8326-44e35401fdc2",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Te invitamos a ingresar a    botm.cc/l/15bNPQVu para ver todos los beneficios que te esperan y mínimos requisitos para tener tu Tarjeta de Crédito. \n\nPodes solicitar tanto una tarjeta Titular como una Adicional Cabal o Visa, ingresando en tu Banca Internet en la opción Tarjetas.\n\nSi necesitás pedir una Tarjeta de Débito Cabal adicional a tu cuenta, acercate a tu Filial para gestionarla personalmente.\n\nPodemos ayudarte con los siguientes temas:"
+      }
+    },
+    {
+      "id": "dda5da5a-ad8b-4d04-b325-847089a59f8b",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Podes consultar el estado y distribución de tus tarjetas a través de Banca Internet, en la opción Tarjetas / Estado de entrega y repactado. Recordá que vas a poder reprogramarlo siempre y cuando el plástico se encuentre en poder del distribuidor central (no en la calle).\n\nPara recibir asistencia de un asesor comunicate con nosotros de Lunes a Viernes de 8 a 19 hs."
+      }
+    },
+    {
+      "id": "0c1e5b57-26d9-4d35-94a2-5f44bc3d8aa2",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Podés acceder al servicio de cuotificación financiando en cuotas todo lo que compraste en un pago. Aplica sobre la sumatoria de tus consumos en un pago pendientes de facturación, junto con el saldo anterior impago. Para realizar la cuotificación de tu resumen, deberás primero efectuar el pago mínimo. Una vez realizado, ingresá desde Credicoop Móvil a Tarjetas/ Tarjeta Cabal/ Cuotificación. Para consultas sobre cuotificación de tu Tarjeta de Crédito Visa comunicate al 0810 222 2868."
+      }
+    },
+    {
+      "id": "b1d08493-a5df-43bf-be0f-48260cf32956",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Podés realizar la Denuncia por Robo o Extravío de tu Tarjeta Cabal a través de tu Banca Internet ingresando en la opción Tarjetas > Tarjetas de débito > Denuncia por robo o extravío, comunicándote con Ayuda en línea en el siguiente enlace:  botm.cc/l/15VjXWGk o llamando al 0800 888 4500 durante las 24hs del día. Si te encontrás en el exterior del país, podés realizarla llamando al +5411 4857 4500.\n\nTe recordamos que si tenés servicios adheridos a red link, al realizar la gestión de denuncia, podrías dejar de visualizarlos. En caso que esto ocurra, una vez que se emita la nueva tarjeta y la habilites, los volverás a encontrar allí. \n\nPara denunciar tu tarjeta VISA comunicate al 0810-666-3368 o ingresa a VisaHome.\n\nPara denunciar tu tarjeta Mastercard comunicate al 4340-5700 desde Capital y Gran Buenos Aires, o al 0810-999-5700 desde el Interior del País."
+      }
+    },
+    {
+      "id": "ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1",
+      "type": "botonesInteractivo",
+      "data": {
+        "selectedVars": [
+          "Volver",
+          "Menu Principal"
+        ]
+      }
+    },
+    {
+      "id": "06909ac8-9105-4e15-8e12-9ff2b6e7b481",
+      "type": "condicionalIntentos",
+      "data": {}
+    },
+    {
+      "id": "a21f353f-2672-4f76-bd15-8dadf60b8c41",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Superó intentos. Finaliza la sesion"
+      }
+    },
+    {
+      "id": "8b46c3fc-6c1b-42b5-ba0b-3ef40a147b88",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Seleccion incorrecta. Intente nuevamente."
+      }
+    },
+    {
+      "id": "14916343-ca3d-4266-8ddd-f0259b1298b6",
+      "type": "termina",
+      "data": {
+        "text": "Mensaje de Finalizacion"
+      }
+    },
+    {
+      "id": "db57b93e-7918-4e2e-a390-0f04a461f832",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Te compartimos los tutoriales para generar las claves que necesites y así operar a través de nuestros medios automáticos. \n\nClave PIN para tu Tarjeta de Débito Cabal: botm.cc/l/15Tp5Ar6 Solapa Beneficios - Apartado “Claves/Modo de uso”.\n\nClave PIL para tu Tarjeta de Débito Cabal: botm.cc/l/15PDayxH Solapa “Clave Alfabética PIL”.\n\nUsaba Credicoop Móvil y quiero ingresar por primera vez a BANCA CREDICOOP: podrás empezar a usar la nueva aplicación con los datos de acceso de tu banca anterior, ingresá acá para revisar nuestras Preguntas Frecuentes. \n botm.cc/l/15vLbFKu\n\nClave de acceso a tu Banca Personal Internet: botm.cc/l/15jTuFsA\n\nClave Móvil: botm.cc/l/15wDxHT0 Solapa “Seguridad”.\n\nRecordá que para acceder por primera vez a tu Banca Internet Empresa, es necesario que te acerques a tu filial.\n\nA continuación te brindamos los pasos a seguir para DESBLOQUEAR tus claves y de esta manera seguir operando a través de nuestros medios automáticos.\n\nClave PIN y/o Clave PIL para tu Tarjeta de Débito Cabal: Desde Credicoop Móvil, en la Opción “Claves para Cajeros”. \n\nDesde Banca Internet en la Opción “Tarjetas/ Gestión de PIL y PIN”. \n\nDesde Credicoop Responde al 0800 888 4500.\n\nUsaba Credicoop Móvil y quiero ingresar por primera vez a BANCA CREDICOOP: si necesitás ayuda con tu primer ingreso, accedé al Chat de Ayuda en Línea para que uno/a de nuestros/as asesores/as te de una mano.\nbotm.cc/l/15H2yCR2 \n\nClave de acceso a tu Banca Personal Internet:  botm.cc/l/15SrNSYy. Solapa “Adhesión y claves” Opción “Olvidé mi clave de acceso, ¿qué debo hacer?”. \n\nClave de acceso a tu Banca Internet Empresa: Si la recordás debés comunicarte con la Mesa de Ayuda  botm.cc/l/15c0mYGS\n\nEn caso contrario te dejamos el siguiente enlace para que te acerques a tu filial con turno  botm.cc/l/15hc2fOZ\n\nClave Móvil o Tarjetas de Coordenadas: Comunicándote con nuestra Mesa de Ayuda al 0800 888 4500 Banca Personal Internet o al 0800 888 8584"
+      }
+    },
+    {
+      "id": "6861477e-b5ac-4fb0-a0f2-594ad9695c9a",
+      "type": "salidaSimple",
+      "data": {
+        "text": "¡Podés solicitar tu cuenta bancaria! \n\nPara abrir tu cuenta sólo tenés que ingresar en la aplicación Credicoop Móvil, presionar en \"Abrí tu cuenta digital\" y completar los datos solicitados.\n\nDescargá ahora mismo nuestra aplicación escaneando el código QR de nuestra web: botm.cc/l/15vM6Jd8 , o descargala de la tienda Google Play: botm.cc/l/15YotEaH.bancocredicoop.bancamobile  o APP Store: botm.cc/l/15VzDAiF \n\nPara más información, podés acceder al siguiente enlace: botm.cc/l/15gRZcYY\n\nPodés conocer los requisitos mínimos para abrir una Cuenta con nosotros, visitando el siguiente enlace: botm.cc/l/15Aw4TpJ\n \nSi ya sos socio del Banco, a través de tu Banca Personal Internet opción ADMINISTRACIÓN, también podes realizar tu solicitud ."
+      }
+    },
+    {
+      "id": "5b88dfea-9c8e-4db5-8535-078112449fc3",
+      "type": "botonesInteractivo",
+      "data": {
+        "selectedVars": [
+          "Volver"
+        ]
+      }
+    },
+    {
+      "id": "73a0b8b8-ea0e-4a92-9a38-a6eee5f66920",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Para más información sobre todas las promociones, ingresá al siguiente enlace: botm.cc/l/15RvC0kB. \nAllí encontrarás los detalles de las mismas y podrás buscarlas por rubro y localidad. \nRecordá que en la parte inferior de cada promoción publicada en nuestra web, podrás ver las bases y condiciones.\n\nTambién te podemos dar información de los siguientes temas:"
+      }
+    },
+    {
+      "id": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "type": "botonesInteractivo",
+      "data": {
+        "selectedVars": [
+          "Puntos Credicoop",
+          "Billetera MODO",
+          "Menú principal"
+        ]
+      }
+    },
+    {
+      "id": "924a39fb-67e6-45f2-a7c9-be04ec37ec33",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Puntos Credicoop es el programa para asociados dónde todos tus consumos realizados con Tarjetas Cabal y Visa, suman puntos que podrás canjear por increíbles premios. ¡Adherite a través de tu Banca Personal Internet o desde la aplicación Credicoop Móvil!\n\nPara saber más sobre el canje de premios, ingresá a botm.cc/l/15BOgLVQ \nTambién podés consultar en la sección Preguntas Frecuentes de nuestra web: botm.cc/l/15FuJ1gs"
+      }
+    },
+    {
+      "id": "8087d723-837c-485d-a5ac-c64ae9f17e2f",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Llegó Billetera MODO para tener todas tus cuentas y tarjetas en un solo lugar. Para saber más sobre MODO ingresá al siguiente enlace: botm.cc/l/15sxxdhg\nSi aun no te registraste en MODO, hacelo desde la app Credicoop Móvil. A través de éste enlace te explicamos cómo: botm.cc/l/15sYVwHt"
+      }
+    },
+    {
+      "id": "9aeb13bb-4def-4668-9cdf-0e454c341611",
+      "type": "botonesInteractivo",
+      "data": {
+        "selectedVars": [
+          "Volver",
+          "Menu Principal"
+        ]
+      }
+    },
+    {
+      "id": "2853c271-7179-4100-8045-8cd637a3c205",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Invertí en plazos fijos, fondos comunes de inversión, títulos y acciones desde la Banca Internet y/o Credicoop Móvil. Te ofrecemos un completo servicio para que inviertas de manera cómoda, ágil y con total transparencia. "
+      }
+    },
+    {
+      "id": "14670a77-df7e-4ca5-b2e2-88ff2b08885a",
+      "type": "botonesInteractivo",
+      "data": {
+        "selectedVars": [
+          "Plazo fijo",
+          "Otras Inversiones",
+          "Menu Principal"
+        ]
+      }
+    },
+    {
+      "id": "9eeb1ac3-f3f2-4739-bec9-dca3ecdc44a2",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Podés invertir constituyendo Plazos Fijos desde tu Banca Internet y/o Credicoop Móvil. Te invitamos a visitar el siguiente enlace: botm.cc/l/154EA0m0\ndonde visualizarás el paso a paso para realizarlos."
+      }
+    },
+    {
+      "id": "93226910-28b8-4702-ab6d-9eacf43324a1",
+      "type": "botonesInteractivo",
+      "data": {
+        "selectedVars": [
+          "Volver",
+          "Menu Principal"
+        ]
+      }
+    },
+    {
+      "id": "61972503-3859-4b5a-bc19-c54cb7affadc",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Ingresá al enlace para visualizar los tutoriales de Ahorro e Inversiones: botm.cc/l/15tlIkxb\n\nPara recibir asesoramiento comercial sobre Inversiones podés comunicarte con nuestro 0800 888 4500 para obtener atención personalizada."
+      }
+    },
+    {
+      "id": "e2632558-5a89-4d4e-aebd-15ec60066507",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Recordá que podés cotizar y contratar tu seguro desde la comodidad de tu casa! Para más información sobre las distintas coberturas que te ofrecemos, ingresá a www.segurcoop.coop"
+      }
+    },
+    {
+      "id": "e4e3e6de-8abb-4d68-90e7-f76209aeeae8",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Para sacar un Préstamo Personal con nosotros, es necesario trabajar en relación de dependencia o ser Monotributista / Autónomo y contar con el monto de ingreso mínimo requerido y antigüedad laboral. \nPodés verificar el detalle de los requisitos, accediendo al siguiente enlace: botm.cc/l/15CNLwns\n\nPara solicitar un crédito hipotecario, podés conocer los requisitos mínimos, ingresando al siguiente enlace: botm.cc/l/15hoXCnp\n\nSi cobrás tu Jubilación o Pensión a través del Banco Credicoop y deseas acceder a un Préstamo Personal, deberás acercarte con turno por tu filial, con la documentación mínima requerida. \n\nVerificá los requisitos accediendo al siguiente enlace: botm.cc/l/15WirhOh\n\nSi necesitas un préstamo, volvé al Menú Principal y comunicate con tu Asesor Comercial, eligiendo la opción 8."
+      }
+    },
+    {
+      "id": "c89db300-c928-442a-989e-603d2dcded08",
+      "type": "salidaSimple",
+      "data": {
+        "text": "Gracias por comunicarte con el Banco Credicoop. Indicame tu número de CUIT o CUIL, sin espacios ni guiones, así podemos derivarte con uno de nuestros asesores comerciales para una atención personalizada."
+      }
+    }
+  ],
+  "edges": [
+    {
+      "type": "smoothstep",
+      "source": "start-node",
+      "target": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+      "id": "xy-edge__start-node-59e1ecca-2070-4f78-a43b-82664aa133b9"
+    },
+    {
+      "type": "smoothstep",
+      "source": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__59e1ecca-2070-4f78-a43b-82664aa133b9-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Tarjetas Credicoop",
+      "target": "cfc47feb-6cc3-4e30-8326-44e35401fdc2",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9eTarjetas Credicoop-cfc47feb-6cc3-4e30-8326-44e35401fdc2"
+    },
+    {
+      "type": "smoothstep",
+      "source": "cfc47feb-6cc3-4e30-8326-44e35401fdc2",
+      "target": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "id": "xy-edge__cfc47feb-6cc3-4e30-8326-44e35401fdc2-1e98e355-4179-48ef-b8c0-39440f29422c"
+    },
+    {
+      "type": "smoothstep",
+      "source": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "sourceHandle": "1️⃣ Tarjetas en distribución",
+      "target": "dda5da5a-ad8b-4d04-b325-847089a59f8b",
+      "id": "xy-edge__1e98e355-4179-48ef-b8c0-39440f29422c1️⃣ Tarjetas en distribución-dda5da5a-ad8b-4d04-b325-847089a59f8b"
+    },
+    {
+      "type": "smoothstep",
+      "source": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "sourceHandle": "4️⃣ Volver al Menú Principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__1e98e355-4179-48ef-b8c0-39440f29422c4️⃣ Volver al Menú Principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "sourceHandle": "2️⃣ Denuncias por robo o extravío",
+      "target": "b1d08493-a5df-43bf-be0f-48260cf32956",
+      "id": "xy-edge__1e98e355-4179-48ef-b8c0-39440f29422c2️⃣ Denuncias por robo o extravío-b1d08493-a5df-43bf-be0f-48260cf32956"
+    },
+    {
+      "type": "smoothstep",
+      "source": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "sourceHandle": "3️⃣ Cuotificación",
+      "target": "0c1e5b57-26d9-4d35-94a2-5f44bc3d8aa2",
+      "id": "xy-edge__1e98e355-4179-48ef-b8c0-39440f29422c3️⃣ Cuotificación-0c1e5b57-26d9-4d35-94a2-5f44bc3d8aa2"
+    },
+    {
+      "type": "smoothstep",
+      "source": "dda5da5a-ad8b-4d04-b325-847089a59f8b",
+      "target": "ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1",
+      "targetHandle": "in",
+      "id": "xy-edge__dda5da5a-ad8b-4d04-b325-847089a59f8b-ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "b1d08493-a5df-43bf-be0f-48260cf32956",
+      "target": "ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1",
+      "targetHandle": "in",
+      "id": "xy-edge__b1d08493-a5df-43bf-be0f-48260cf32956-ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "0c1e5b57-26d9-4d35-94a2-5f44bc3d8aa2",
+      "target": "ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1",
+      "targetHandle": "in",
+      "id": "xy-edge__0c1e5b57-26d9-4d35-94a2-5f44bc3d8aa2-ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1",
+      "sourceHandle": "Volver",
+      "target": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "id": "xy-edge__ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1Volver-1e98e355-4179-48ef-b8c0-39440f29422c"
+    },
+    {
+      "type": "smoothstep",
+      "source": "ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1",
+      "sourceHandle": "Menu Principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__ab7b1d2a-1a9e-47ae-8e69-9279cfdb31c1Menu Principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "sourceHandle": "error",
+      "target": "06909ac8-9105-4e15-8e12-9ff2b6e7b481",
+      "id": "xy-edge__1e98e355-4179-48ef-b8c0-39440f29422cerror-06909ac8-9105-4e15-8e12-9ff2b6e7b481"
+    },
+    {
+      "type": "smoothstep",
+      "source": "06909ac8-9105-4e15-8e12-9ff2b6e7b481",
+      "sourceHandle": "true",
+      "target": "a21f353f-2672-4f76-bd15-8dadf60b8c41",
+      "id": "xy-edge__06909ac8-9105-4e15-8e12-9ff2b6e7b481true-a21f353f-2672-4f76-bd15-8dadf60b8c41"
+    },
+    {
+      "type": "smoothstep",
+      "source": "06909ac8-9105-4e15-8e12-9ff2b6e7b481",
+      "sourceHandle": "false",
+      "target": "8b46c3fc-6c1b-42b5-ba0b-3ef40a147b88",
+      "id": "xy-edge__06909ac8-9105-4e15-8e12-9ff2b6e7b481false-8b46c3fc-6c1b-42b5-ba0b-3ef40a147b88"
+    },
+    {
+      "type": "smoothstep",
+      "source": "8b46c3fc-6c1b-42b5-ba0b-3ef40a147b88",
+      "target": "1e98e355-4179-48ef-b8c0-39440f29422c",
+      "id": "xy-edge__8b46c3fc-6c1b-42b5-ba0b-3ef40a147b88-1e98e355-4179-48ef-b8c0-39440f29422c"
+    },
+    {
+      "type": "smoothstep",
+      "source": "a21f353f-2672-4f76-bd15-8dadf60b8c41",
+      "target": "14916343-ca3d-4266-8ddd-f0259b1298b6",
+      "id": "xy-edge__a21f353f-2672-4f76-bd15-8dadf60b8c41-14916343-ca3d-4266-8ddd-f0259b1298b6"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Gestión de Claves",
+      "target": "db57b93e-7918-4e2e-a390-0f04a461f832",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9eGestión de Claves-db57b93e-7918-4e2e-a390-0f04a461f832"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Alta Digital",
+      "target": "6861477e-b5ac-4fb0-a0f2-594ad9695c9a",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9eAlta Digital-6861477e-b5ac-4fb0-a0f2-594ad9695c9a"
+    },
+    {
+      "type": "smoothstep",
+      "source": "6861477e-b5ac-4fb0-a0f2-594ad9695c9a",
+      "target": "5b88dfea-9c8e-4db5-8535-078112449fc3",
+      "targetHandle": "in",
+      "id": "xy-edge__6861477e-b5ac-4fb0-a0f2-594ad9695c9a-5b88dfea-9c8e-4db5-8535-078112449fc3in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "db57b93e-7918-4e2e-a390-0f04a461f832",
+      "target": "5b88dfea-9c8e-4db5-8535-078112449fc3",
+      "targetHandle": "in",
+      "id": "xy-edge__db57b93e-7918-4e2e-a390-0f04a461f832-5b88dfea-9c8e-4db5-8535-078112449fc3in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "5b88dfea-9c8e-4db5-8535-078112449fc3",
+      "sourceHandle": "Volver",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__5b88dfea-9c8e-4db5-8535-078112449fc3Volver-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Promos y Beneficios",
+      "target": "73a0b8b8-ea0e-4a92-9a38-a6eee5f66920",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9ePromos y Beneficios-73a0b8b8-ea0e-4a92-9a38-a6eee5f66920"
+    },
+    {
+      "type": "smoothstep",
+      "source": "73a0b8b8-ea0e-4a92-9a38-a6eee5f66920",
+      "target": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "targetHandle": "in",
+      "id": "xy-edge__73a0b8b8-ea0e-4a92-9a38-a6eee5f66920-39abbd5c-8696-4149-8faa-e8fe94a41a2fin"
+    },
+    {
+      "type": "smoothstep",
+      "source": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "sourceHandle": "Puntos Credicoop",
+      "target": "924a39fb-67e6-45f2-a7c9-be04ec37ec33",
+      "id": "xy-edge__39abbd5c-8696-4149-8faa-e8fe94a41a2fPuntos Credicoop-924a39fb-67e6-45f2-a7c9-be04ec37ec33"
+    },
+    {
+      "type": "smoothstep",
+      "source": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "sourceHandle": "Billetera virtual MODO",
+      "target": "8087d723-837c-485d-a5ac-c64ae9f17e2f",
+      "id": "xy-edge__39abbd5c-8696-4149-8faa-e8fe94a41a2fBilletera virtual MODO-8087d723-837c-485d-a5ac-c64ae9f17e2f"
+    },
+    {
+      "type": "smoothstep",
+      "source": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "sourceHandle": "Volver al Menú principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__39abbd5c-8696-4149-8faa-e8fe94a41a2fVolver al Menú principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "924a39fb-67e6-45f2-a7c9-be04ec37ec33",
+      "target": "9aeb13bb-4def-4668-9cdf-0e454c341611",
+      "targetHandle": "in",
+      "id": "xy-edge__924a39fb-67e6-45f2-a7c9-be04ec37ec33-9aeb13bb-4def-4668-9cdf-0e454c341611in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "8087d723-837c-485d-a5ac-c64ae9f17e2f",
+      "target": "9aeb13bb-4def-4668-9cdf-0e454c341611",
+      "targetHandle": "in",
+      "id": "xy-edge__8087d723-837c-485d-a5ac-c64ae9f17e2f-9aeb13bb-4def-4668-9cdf-0e454c341611in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "9aeb13bb-4def-4668-9cdf-0e454c341611",
+      "sourceHandle": "Volver",
+      "target": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "targetHandle": "in",
+      "id": "xy-edge__9aeb13bb-4def-4668-9cdf-0e454c341611Volver-39abbd5c-8696-4149-8faa-e8fe94a41a2fin"
+    },
+    {
+      "type": "smoothstep",
+      "source": "9aeb13bb-4def-4668-9cdf-0e454c341611",
+      "sourceHandle": "Menu Principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__9aeb13bb-4def-4668-9cdf-0e454c341611Menu Principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Inversiones",
+      "target": "2853c271-7179-4100-8045-8cd637a3c205",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9eInversiones-2853c271-7179-4100-8045-8cd637a3c205"
+    },
+    {
+      "type": "smoothstep",
+      "source": "2853c271-7179-4100-8045-8cd637a3c205",
+      "target": "14670a77-df7e-4ca5-b2e2-88ff2b08885a",
+      "targetHandle": "in",
+      "id": "xy-edge__2853c271-7179-4100-8045-8cd637a3c205-14670a77-df7e-4ca5-b2e2-88ff2b08885ain"
+    },
+    {
+      "type": "smoothstep",
+      "source": "14670a77-df7e-4ca5-b2e2-88ff2b08885a",
+      "sourceHandle": "Plazo fijo",
+      "target": "9eeb1ac3-f3f2-4739-bec9-dca3ecdc44a2",
+      "id": "xy-edge__14670a77-df7e-4ca5-b2e2-88ff2b08885aPlazo fijo-9eeb1ac3-f3f2-4739-bec9-dca3ecdc44a2"
+    },
+    {
+      "type": "smoothstep",
+      "source": "9eeb1ac3-f3f2-4739-bec9-dca3ecdc44a2",
+      "target": "93226910-28b8-4702-ab6d-9eacf43324a1",
+      "targetHandle": "in",
+      "id": "xy-edge__9eeb1ac3-f3f2-4739-bec9-dca3ecdc44a2-93226910-28b8-4702-ab6d-9eacf43324a1in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "93226910-28b8-4702-ab6d-9eacf43324a1",
+      "sourceHandle": "Volver",
+      "target": "14670a77-df7e-4ca5-b2e2-88ff2b08885a",
+      "targetHandle": "in",
+      "id": "xy-edge__93226910-28b8-4702-ab6d-9eacf43324a1Volver-14670a77-df7e-4ca5-b2e2-88ff2b08885ain"
+    },
+    {
+      "type": "smoothstep",
+      "source": "93226910-28b8-4702-ab6d-9eacf43324a1",
+      "sourceHandle": "Menu Principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__93226910-28b8-4702-ab6d-9eacf43324a1Menu Principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "14670a77-df7e-4ca5-b2e2-88ff2b08885a",
+      "sourceHandle": "Otras Inversiones",
+      "target": "61972503-3859-4b5a-bc19-c54cb7affadc",
+      "id": "xy-edge__14670a77-df7e-4ca5-b2e2-88ff2b08885aOtras Inversiones-61972503-3859-4b5a-bc19-c54cb7affadc"
+    },
+    {
+      "type": "smoothstep",
+      "source": "61972503-3859-4b5a-bc19-c54cb7affadc",
+      "target": "93226910-28b8-4702-ab6d-9eacf43324a1",
+      "targetHandle": "in",
+      "id": "xy-edge__61972503-3859-4b5a-bc19-c54cb7affadc-93226910-28b8-4702-ab6d-9eacf43324a1in"
+    },
+    {
+      "type": "smoothstep",
+      "source": "14670a77-df7e-4ca5-b2e2-88ff2b08885a",
+      "sourceHandle": "Menu Principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__14670a77-df7e-4ca5-b2e2-88ff2b08885aMenu Principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e2632558-5a89-4d4e-aebd-15ec60066507",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__e2632558-5a89-4d4e-aebd-15ec60066507-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Seguros",
+      "target": "e2632558-5a89-4d4e-aebd-15ec60066507",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9eSeguros-e2632558-5a89-4d4e-aebd-15ec60066507"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Préstamos",
+      "target": "e4e3e6de-8abb-4d68-90e7-f76209aeeae8",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9ePréstamos-e4e3e6de-8abb-4d68-90e7-f76209aeeae8"
+    },
+    {
+      "type": "smoothstep",
+      "source": "e4e3e6de-8abb-4d68-90e7-f76209aeeae8",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__e4e3e6de-8abb-4d68-90e7-f76209aeeae8-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstepº",
+      "source": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "sourceHandle": "Comunicar con Asesor",
+      "target": "c89db300-c928-442a-989e-603d2dcded08",
+      "id": "xy-edge__e59b8633-974d-47cc-85eb-603f1b172a9eComunicar con Asesor-c89db300-c928-442a-989e-603d2dcded08"
+    },
+    {
+      "type": "smoothstep",
+      "source": "c89db300-c928-442a-989e-603d2dcded08",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__c89db300-c928-442a-989e-603d2dcded08-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    },
+    {
+      "type": "smoothstep",
+      "source": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "sourceHandle": "Billetera MODO",
+      "target": "8087d723-837c-485d-a5ac-c64ae9f17e2f",
+      "id": "xy-edge__39abbd5c-8696-4149-8faa-e8fe94a41a2fBilletera MODO-8087d723-837c-485d-a5ac-c64ae9f17e2f"
+    },
+    {
+      "type": "smoothstep",
+      "source": "39abbd5c-8696-4149-8faa-e8fe94a41a2f",
+      "sourceHandle": "Menú principal",
+      "target": "e59b8633-974d-47cc-85eb-603f1b172a9e",
+      "targetHandle": "in",
+      "id": "xy-edge__39abbd5c-8696-4149-8faa-e8fe94a41a2fMenú principal-e59b8633-974d-47cc-85eb-603f1b172a9ein"
+    }
+  ]
+}
