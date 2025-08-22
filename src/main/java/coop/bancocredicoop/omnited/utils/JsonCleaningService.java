@@ -2,15 +2,18 @@ package coop.bancocredicoop.omnited.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JsonCleaningService {
 
-  private static final Set<String> KEYS_TO_REMOVE = Set.of(
+  private static final Set<String> KEYS_TO_REMOVE = new HashSet<>(Arrays.asList(
       "measured", "position", "dragging", "selected", "viewport", "options", "style"
-  );
+  ));
 
   /**
    * Limpia recursivamente un JsonNode eliminando las claves "measured",

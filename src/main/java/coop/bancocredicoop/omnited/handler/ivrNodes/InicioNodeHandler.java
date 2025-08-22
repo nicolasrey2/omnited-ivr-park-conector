@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.handler.ivr;
+package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
@@ -24,7 +24,7 @@ public class InicioNodeHandler implements NodeHandler {
   @Override
   public String handle(JsonNode botLimpio, JsonNode nodoIn, String from, String textoUsuario) {
     // Log de inicio (puedes usar canalMensajeria si prefieres enviar un mensaje)
-    System.out.println("INICIA BOT para usuario=" + from);
+    System.out.println("INICIA BOT-IVR para canal=" + from);
 
     // Devuelve el nodo al que seguir
     return DiagramaUtils.obtenerTarget(botLimpio, nodoIn);

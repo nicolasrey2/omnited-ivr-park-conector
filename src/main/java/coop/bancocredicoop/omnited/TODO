@@ -1,3 +1,0 @@
-se deben definir los nombres de las colas de rabbitMQ y la key de los handlers de rabbitListenerService
-
-donde poner el TTS, si en el adapter o en el Asterisk-server

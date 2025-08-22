@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
-public class DiagramaService {
+public class DiagramaStore {
 
-  private static final Logger LOGGER = Logger.getLogger(DiagramaService.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(DiagramaStore.class.getName());
   private volatile JsonNode currentDiagram;
 
   /**

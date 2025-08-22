@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class IVR {
   private Integer idIVR;
-  private JsonNode IVRPayload;
+  private JsonNode ivrPayload;
 
   public IVR() {
   }
 
-  public IVR(Integer idIVR, JsonNode IVRPayload) {
+  public IVR(Integer idIVR, JsonNode ivrPayload) {
     this.idIVR = idIVR;
-    this.IVRPayload = IVRPayload;
+    this.ivrPayload = ivrPayload;
   }
 
   // getters and setters
@@ -25,11 +25,11 @@ public class IVR {
     this.idIVR = idIVR;
   }
 
-  public JsonNode getIVRPayload() {
-    return IVRPayload;
+  public JsonNode getIvrPayload() {
+    return ivrPayload;
   }
 
-  public void setIVRPayload(JsonNode IVRPayload) {
-    this.IVRPayload = IVRPayload;
+  public void setIvrPayload(JsonNode ivrPayload) {
+    this.ivrPayload = ivrPayload;
   }
 }

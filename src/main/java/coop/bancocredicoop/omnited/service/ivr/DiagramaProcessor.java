@@ -5,21 +5,22 @@ import coop.bancocredicoop.omnited.messages.CanalMensajeria;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.ext.ParamConverter;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-public class DiagramaMapper {
+public class DiagramaProcessor {
 
-    private static final Logger LOGGER = Logger.getLogger(DiagramaMapper.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DiagramaProcessor.class.getName());
     private static final long TTL_SEC = 300; // segundos (5 minutos)
 
     private final RedisService redisService;
     private final CanalMensajeria canalMensajeria;
     private final Map<String, NodeHandler> handlers;
 
-    public DiagramaMapper(
+    public DiagramaProcessor(
             RedisService redisService,
             CanalMensajeria canalMensajeria,
             Map<String, NodeHandler> handlers
@@ -31,7 +32,7 @@ public class DiagramaMapper {
 
     /**
      * Procesa un mensaje entrante para un diagrama dado.
-     * @param ivrLimpio     JSON completo del bot (nodes y edges)
+     * @param ivrLimpio     JSON completo del ivr (nodes y edges)
      * @param from          Identificador del usuario
      * @param textoUsuario  Texto enviado por el usuario
      */

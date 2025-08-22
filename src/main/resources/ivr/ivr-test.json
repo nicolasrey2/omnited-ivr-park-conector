@@ -1,0 +1,31 @@
+{
+  "idIVR": 1,
+  "ivrPayload": {
+    "nodes": [
+      {
+        "id": "start-node",
+        "type": "inicio",
+        "data": {
+          "label": "Inicio Bot"
+        },
+        "draggable": false,
+        "selectable": false
+      },
+      {
+        "id": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+        "type": "salidaSimple",
+        "data": {
+          "text": "👋 Hola, soy tu asistente virtual, ¡estoy para ayudarte! ¿Viste que no tengo la tilde verde?  Significa que es mi número NO es oficial."
+        }
+      }
+    ],
+    "edges": [
+      {
+        "type": "smoothstep",
+        "source": "start-node",
+        "target": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+        "id": "xy-edge__start-node-59e1ecca-2070-4f78-a43b-82664aa133b9"
+      }
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 package coop.bancocredicoop.omnited.handler.rabbit;
 
 import coop.bancocredicoop.omnited.entity.IVR;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaService;
+import coop.bancocredicoop.omnited.service.ivr.DiagramaStore;
 import coop.bancocredicoop.omnited.service.rabbit.RabbitMessageHandler;
 
 import java.util.logging.Level;
@@ -10,32 +10,31 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import coop.bancocredicoop.omnited.utils.JsonCleaningService;
 
-// nombre dudoso
-public class IVRHandler implements RabbitMessageHandler {
-  private static final Logger LOGGER = Logger.getLogger(IVRHandler.class.getName());
+public class IvrUpdaterHandler implements RabbitMessageHandler {
+  private static final Logger LOGGER = Logger.getLogger(IvrUpdaterHandler.class.getName());
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final JsonCleaningService jsonCleaningService;
-  private final DiagramaService diagramaService;
+  private final DiagramaStore diagramaStore;
 
-  public IVRHandler(JsonCleaningService jsonCleaningService,
-                    DiagramaService diagramaService) {
+  public IvrUpdaterHandler(JsonCleaningService jsonCleaningService,
+                           DiagramaStore diagramaStore) {
     this.jsonCleaningService = jsonCleaningService;
-    this.diagramaService = diagramaService;
+    this.diagramaStore = diagramaStore;
   }
 
   @Override
   public void handle(String idMensaje, String rawIVR, long fechaEnvioLocal) throws Exception {
     JsonNode ivrLimpio = this.parsearIvr(rawIVR);
-    diagramaService.saveDiagram(ivrLimpio);
+    diagramaStore.saveDiagram(ivrLimpio);
   }
 
   private JsonNode parsearIvr(String rawIVR) {
     try {
       IVR ivr = objectMapper.readValue(rawIVR, IVR.class);
-      return jsonCleaningService.clean(ivr.getIVRPayload());
+      return jsonCleaningService.clean(ivr.getIvrPayload());
     }
     catch (Exception e) {
-      LOGGER.log(Level.WARNING, "Error parsing IVR JSON");
+      LOGGER.log(Level.WARNING, "Error parsing IVR JSON:" + e.getMessage());
       return null;
     }
   }

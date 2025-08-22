@@ -63,6 +63,20 @@
             <version>3.20.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.ari4java</groupId>
+            <artifactId>ari4java</artifactId>
+            <version>0.17.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

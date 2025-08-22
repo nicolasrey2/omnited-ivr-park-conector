@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import coop.bancocredicoop.omnited.config.MessageOut;
-import coop.bancocredicoop.omnited.handler.rabbit.IVRHandler;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaService;
+import coop.bancocredicoop.omnited.handler.rabbit.IvrUpdaterHandler;
+import coop.bancocredicoop.omnited.service.ivr.DiagramaStore;
 import coop.bancocredicoop.omnited.utils.JsonCleaningService;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -23,10 +23,14 @@ public class RabbitListenerService {
    */
   public RabbitListenerService(
       JsonCleaningService jsonCleaningService,
-      DiagramaService diagramaService
+      DiagramaStore diagramaStore
   ) {
-    // TODO definir bien esta key
-    handlers.put("ivr", new IVRHandler(jsonCleaningService, diagramaService));
+
+    // TODO definir bien estas keys
+
+    // para actualizar el diagrama del ivr
+    handlers.put("actualizarIVR", new IvrUpdaterHandler(jsonCleaningService, diagramaStore));
+
   }
 
   /**
@@ -35,7 +39,7 @@ public class RabbitListenerService {
    *
    */
   @RabbitListener(queues = {
-      "#{@environment.getProperty('spring.rabbitmq.colaDB_WA')}"
+      "#{@environment.getProperty('spring.rabbitmq.colaDB_IVR1')}"
   })
   public void receiveMessage(MessageOut.MensajeJSON message) {
 
