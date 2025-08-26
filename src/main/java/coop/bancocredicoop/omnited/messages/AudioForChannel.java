@@ -16,7 +16,9 @@ public class AudioForChannel implements  CanalMensajeria {
 
   @Override
   public void enviarMensaje(String channelId, String textToSendToChannel) {
+    System.out.println("AudioForChannel.enviarMensaje..." + channelId + " , " + textToSendToChannel);
     String audioFilename = piperTtsService.textToSpeech(textToSendToChannel);
+    System.out.println("audio generado: " + audioFilename);
     ariConnector.play(channelId, audioFilename);
   }
 }

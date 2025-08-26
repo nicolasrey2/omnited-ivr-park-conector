@@ -15,8 +15,30 @@
         "id": "59e1ecca-2070-4f78-a43b-82664aa133b9",
         "type": "salidaSimple",
         "data": {
-          "text": "👋 Hola, soy tu asistente virtual, ¡estoy para ayudarte! ¿Viste que no tengo la tilde verde?  Significa que es mi número NO es oficial."
+          "text": "Bienvenido al Banco Credicoop. Ingrese su DNI"
         }
+      },
+      {
+        "id": "3",
+        "type": "dtmfInput",
+        "data": {
+          "cantidad": "8"
+        }
+      },
+      {
+        "id": "4",
+        "type": "dniQuery"
+      },
+      {
+        "id": "5",
+        "type": "salidaSimple",
+        "data": {
+          "text": "Gracias por comunicarse"
+        }
+      },
+      {
+        "id": "6",
+        "type": "hangup"
       }
     ],
     "edges": [
@@ -25,6 +47,30 @@
         "source": "start-node",
         "target": "59e1ecca-2070-4f78-a43b-82664aa133b9",
         "id": "xy-edge__start-node-59e1ecca-2070-4f78-a43b-82664aa133b9"
+      },
+      {
+        "type": "smoothstep",
+        "source": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+        "target": "3",
+        "id": "xy-edge__59e1ecca-2070-4f78-a43b-82664aa133b9-3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "target": "4",
+        "id": "xy-edge__3-4"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "target": "5",
+        "id": "xy-edge__4-5"
+      },
+      {
+        "type": "smoothstep",
+        "source": "5",
+        "target": "6",
+        "id": "xy-edge__5-6"
       }
     ]
   }

@@ -1,10 +1,14 @@
 package coop.bancocredicoop.omnited.service.tts;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.*;
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PiperTtsService {
@@ -12,47 +16,39 @@ public class PiperTtsService {
   @Value("${piper.tts.endpoint}")
   private String uriEndpointTTS;
 
-  @Value("${piper.audio.output.path}")
-  private String audioOutputPath;
+  private final RestTemplate restTemplate;
 
-  private final RestTemplate restTemplate = new RestTemplate();
+  public PiperTtsService() {
+    this.restTemplate = new RestTemplate();
+  }
 
   /**
    * Genera un archivo de audio a partir del texto recibido.
-   * <p>
-   * El texto es enviado al microservicio de TTS, que devuelve el nombre de archivo
-   * del audio generado en formato WAV. Este método devuelve el path completo
-   * del archivo de audio en el sistema de archivos.
-   * </p>
    *
-   * @param text Texto a convertir en audio.
-   * @return Ruta completa del archivo WAV generado. (o filename)
-   * @throws RuntimeException Si ocurre un error en la comunicación con el microservicio de TTS
-   *                          o si la respuesta es inválida.
+   * @param textToSpeech Texto a convertir en audio.
+   * @return Ruta completa del archivo WAV generado.
    */
-  public String textToSpeech(String text) {
-    // JSON body
-    String requestJson = String.format("{\"texto\": \"%s\"}", text);
+  public String textToSpeech(String textToSpeech) {
+
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("texto", textToSpeech);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    HttpEntity<String> httpEntity = new HttpEntity<>(requestJson, headers);
+    HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
+    ResponseEntity<String> response = restTemplate.postForEntity(uriEndpointTTS, request, String.class);
 
-    // Hacemos el POST
-    ResponseEntity<JsonNode> response = restTemplate.exchange(
-        uriEndpointTTS,
-        HttpMethod.POST,
-        httpEntity,
-        JsonNode.class
-    );
-
-    if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
-      throw new RuntimeException("Error en TTS: " + response.getStatusCode());
+    // Parseamos JSON y devolvemos solo el valor de "archivo"
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode json = null;
+    try {
+      json = mapper.readTree(response.getBody());
+    } catch (JsonProcessingException e) {
+      System.out.println("Error: " + e.getMessage());
+      throw new RuntimeException(e);
     }
 
-    String fileName = response.getBody().get("archivo").asText();
-    //return audioOutputPath + "/" + fileName;
-    return fileName;
+    return json.get("archivo").asText();
   }
 }

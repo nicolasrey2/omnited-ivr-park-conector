@@ -1,0 +1,6 @@
+1 -> logica para interrumpir audio al recibir un dtmf
+2 -> nodo que presente opciones (1 para ... 2 para ...)
+    y que en base al dtmf salte a otros nodos (ver servidor whatsapp)
+3 -> analizar con martin que estadisticas debo generar con respecto al ivr
+4 -> analizar con martin funcionamiento general del parking
+5 -> analizar conexion con adapter de extensiones (inicialmente relacion con ivr)

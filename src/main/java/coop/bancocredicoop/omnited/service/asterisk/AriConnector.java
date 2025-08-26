@@ -2,18 +2,17 @@ package coop.bancocredicoop.omnited.service.asterisk;
 
 import ch.loway.oss.ari4java.ARI;
 import ch.loway.oss.ari4java.AriVersion;
-import ch.loway.oss.ari4java.generated.actions.ActionChannels;
 import ch.loway.oss.ari4java.generated.models.Message;
+import ch.loway.oss.ari4java.generated.models.Playback;
 import ch.loway.oss.ari4java.tools.AriConnectionEvent;
 import ch.loway.oss.ari4java.tools.AriWSCallback;
 import ch.loway.oss.ari4java.tools.RestException;
+import coop.bancocredicoop.omnited.service.redis.RedisService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,14 +29,16 @@ public class AriConnector {
   @Value("${ari.app}")
   private String app;
 
+
   private ARI ari;
   private final AriMessageMapper ariMessageMapper;
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
+  private final RedisService redisService;
   private volatile boolean connected = false;
 
-  public AriConnector(AriMessageMapper ariMessageMapper) {
+  public AriConnector(AriMessageMapper ariMessageMapper, RedisService redisService) {
     this.ariMessageMapper = ariMessageMapper;
+    this.redisService = redisService;
   }
 
   @PostConstruct
@@ -93,27 +94,28 @@ public class AriConnector {
     }
   }
 
-  public void play(String channelId, String sound) {
-    ActionChannels actionChannels = ari.channels();
-    String ip = getLocalIP();
-    String url = "http://" + ip + "/audio/" + sound;
+  public void play(String channelId, String soundFilename) {
+    String sound = FilenameUtils.removeExtension(soundFilename);
+    String url = "sound:" + sound;
     try {
-      actionChannels.play(channelId, url);
+      System.out.println("Enviando audio a Asterisk: " + url);
+      Playback playback = ari.channels().play(channelId, url).execute();
+      redisService.set("playback:" + playback.getId(), channelId, 300);
+      System.out.println("Playback ID: " + playback);
     } catch (RestException e) {
-      System.out.println("Error en envio de play a asterisl" + e.getMessage());
+      System.err.println("Error enviando audio a Asterisk: " + e.getMessage());
     }
   }
 
-  // Obtiene automáticamente la IP local
-  private String getLocalIP() {
+  public void hangupChannel(String channelId) {
     try {
-      InetAddress localHost = InetAddress.getLocalHost();
-      return localHost.getHostAddress();
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-      return "127.0.0.1"; // fallback
+      ari.channels().hangup(channelId).execute();
+      System.out.println("Hangup channel ID: " + channelId);
+    } catch (RestException e) {
+      System.out.println("Error enviando audio a Asterisk: " + e.getMessage());
     }
   }
+
 
   @PreDestroy
   public void shutdown() {
