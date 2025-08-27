@@ -3,15 +3,14 @@ package coop.bancocredicoop.omnited.handler.rabbit;
 import coop.bancocredicoop.omnited.entity.IVR;
 import coop.bancocredicoop.omnited.service.ivr.DiagramaStore;
 import coop.bancocredicoop.omnited.service.rabbit.RabbitMessageHandler;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import coop.bancocredicoop.omnited.utils.JsonCleaningService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IvrUpdaterHandler implements RabbitMessageHandler {
-  private static final Logger LOGGER = Logger.getLogger(IvrUpdaterHandler.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(IvrUpdaterHandler.class);
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final JsonCleaningService jsonCleaningService;
   private final DiagramaStore diagramaStore;
@@ -34,7 +33,7 @@ public class IvrUpdaterHandler implements RabbitMessageHandler {
       return jsonCleaningService.clean(ivr.getIvrPayload());
     }
     catch (Exception e) {
-      LOGGER.log(Level.WARNING, "Error parsing IVR JSON:" + e.getMessage());
+      log.error("Error parsing IVR JSON", e);
       return null;
     }
   }

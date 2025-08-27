@@ -9,6 +9,8 @@ import ch.loway.oss.ari4java.tools.AriWSCallback;
 import ch.loway.oss.ari4java.tools.RestException;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
@@ -19,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class AriConnector {
+  private static final Logger log = LoggerFactory.getLogger(AriConnector.class);
+
 
   @Value("${ari.url}")
   private String ariUrl;
@@ -52,7 +56,7 @@ public class AriConnector {
 
   private void connect() {
     try {
-      System.out.println("Conectando a ARI...");
+      log.info("Conectando a ARI...");
       ari = ARI.build(ariUrl, app, username, password, AriVersion.ARI_8_0_0);
 
       ari.events()
@@ -65,13 +69,13 @@ public class AriConnector {
 
             @Override
             public void onFailure(RestException e) {
-              System.err.println("Error en ARI: " + e.getMessage());
+              log.error("Error al conectar a ARI", e);
               reconnectLater();
             }
 
             @Override
             public void onConnectionEvent(AriConnectionEvent event) {
-              System.out.println("Estado WS: " + event);
+              log.info("Estado WS: {}", event);
               if (event == AriConnectionEvent.WS_CONNECTED) {
                 connected = true;
               } else if (event == AriConnectionEvent.WS_DISCONNECTED) {
@@ -82,14 +86,14 @@ public class AriConnector {
           });
 
     } catch (Exception e) {
-      System.err.println("Error inicial conectando a ARI: " + e.getMessage());
+      log.error("Error inicial conectando a ARI: {}", e.getMessage());
       reconnectLater();
     }
   }
 
   private void reconnectLater() {
     if (!connected) {
-      System.out.println("Reintentando conexión ARI en 5 segundos...");
+      log.info("Reintentando conexión ARI en 5 segundos...");
       scheduler.schedule(this::connect, 5, TimeUnit.SECONDS);
     }
   }
@@ -98,28 +102,28 @@ public class AriConnector {
     String sound = FilenameUtils.removeExtension(soundFilename);
     String url = "sound:" + sound;
     try {
-      System.out.println("Enviando audio a Asterisk: " + url);
+      log.info("Enviando audio a Asterisk: {}", url);
       Playback playback = ari.channels().play(channelId, url).execute();
       redisService.set("playback:" + playback.getId(), channelId, 300);
-      System.out.println("Playback ID: " + playback);
+      log.info("Playback ID: {}", playback);
     } catch (RestException e) {
-      System.err.println("Error enviando audio a Asterisk: " + e.getMessage());
+      log.error("Error enviando audio a Asterisk: {}", e.getMessage());
     }
   }
 
   public void hangupChannel(String channelId) {
     try {
       ari.channels().hangup(channelId).execute();
-      System.out.println("Hangup channel ID: " + channelId);
+      log.info("Hangup channel ID: {}", channelId);
     } catch (RestException e) {
-      System.out.println("Error enviando audio a Asterisk: " + e.getMessage());
+      log.error("Error colgando el canal: {}. Error: {}", channelId, e.getMessage());
     }
   }
 
 
   @PreDestroy
   public void shutdown() {
-    System.out.println("Cerrando conexión ARI...");
+    log.info("Cerrando conexión ARI...");
     scheduler.shutdownNow();
     if (ari != null) {
       ari.cleanup();

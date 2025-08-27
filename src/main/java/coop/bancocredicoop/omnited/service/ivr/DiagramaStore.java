@@ -1,21 +1,21 @@
 package coop.bancocredicoop.omnited.service.ivr;
 
-import java.util.logging.Logger;
+import coop.bancocredicoop.omnited.handler.rabbit.IvrUpdaterHandler;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class DiagramaStore {
-
-  private static final Logger LOGGER = Logger.getLogger(DiagramaStore.class.getName());
+  private static final org.slf4j.Logger log = LoggerFactory.getLogger(DiagramaStore.class);
   private volatile JsonNode currentDiagram;
 
   /**
    * Guarda (o reemplaza) el diagrama actual.
    */
   public void saveDiagram(JsonNode d) {
-    System.out.println("Se guardo el diagrama");
     this.currentDiagram = d;
+    log.info("Se guardo el diagrama");
   }
 
   /**

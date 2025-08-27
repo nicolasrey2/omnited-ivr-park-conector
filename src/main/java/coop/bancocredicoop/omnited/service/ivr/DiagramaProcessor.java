@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.messages.CanalMensajeria;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Service;
-
-import javax.ws.rs.ext.ParamConverter;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class DiagramaProcessor {
+    private static final Logger log = LoggerFactory.getLogger(DiagramaProcessor.class);
 
-    private static final Logger LOGGER = Logger.getLogger(DiagramaProcessor.class.getName());
     private static final long TTL_SEC = 300; // segundos (5 minutos)
 
     private final RedisService redisService;
@@ -58,7 +56,7 @@ public class DiagramaProcessor {
         // Obtener nodo actual
         JsonNode nodoActual = DiagramaUtils.encontrarNodoPorId(ivrLimpio, nodoActualId);
         if (nodoActual == null) {
-            LOGGER.log(Level.SEVERE, "[" + from + "] Nodo no encontrado: id=" + nodoActualId);
+            log.error("[{}] Nodo no encontrado: id={}", from, nodoActualId);
             return;
         }
 
@@ -66,7 +64,7 @@ public class DiagramaProcessor {
         String tipo = nodoActual.get("type").asText();
         NodeHandler handler = handlers.get(tipo);
         if (handler == null) {
-            LOGGER.log(Level.WARNING, "[" + from + "] Handler no registrado para tipo=" + tipo);
+            log.warn("[{}] Handler no registrado para tipo={}", from, tipo);
             return;
         }
 

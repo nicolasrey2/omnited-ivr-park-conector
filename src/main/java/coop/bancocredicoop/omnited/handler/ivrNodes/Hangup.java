@@ -6,6 +6,7 @@ import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Component;
 
+
 @Component("hangup")
 public class Hangup implements NodeHandler {
   private RedisService redisService;

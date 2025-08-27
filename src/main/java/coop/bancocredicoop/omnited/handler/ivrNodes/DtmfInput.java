@@ -5,9 +5,12 @@ import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component("dtmfInput")
 public class DtmfInput implements NodeHandler {
+  private static final Logger log = LoggerFactory.getLogger(DtmfInput.class);
   private RedisService redisService;
   private static final long TTL_SEC = 30; // 30 segs
 
@@ -39,7 +42,7 @@ public class DtmfInput implements NodeHandler {
       valorAsInteger = Integer.parseInt(valor);
     }
     catch (NumberFormatException e) {
-      System.out.println("No se puede convertir el texto a numero en DtmfIntput.handle. Texto: " + valor);
+      log.error("Error convertir valor integer: " + valor);
     }
     return valorAsInteger;
   }

@@ -6,9 +6,12 @@ import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component("salidaSimple")
 public class SalidaSimpleHandler implements NodeHandler {
+    private final Logger log = LoggerFactory.getLogger(SalidaSimpleHandler.class);
     private RedisService redisService;
     private final CanalMensajeria canalMensajeria;
     private final int TTL = 300;
@@ -26,8 +29,8 @@ public class SalidaSimpleHandler implements NodeHandler {
         String texto = nodo.get("data").get("text").asText();
 
         String siguienteId = DiagramaUtils.obtenerTarget(botLimpio, nodo);
-        System.out.println("Texto: " + texto);
-        System.out.println("siguienteId: " + siguienteId);
+        log.info("Texto: {}", texto);
+        log.info("siguienteId: {}", siguienteId);
         redisService.set("siguiente:" + from, siguienteId, 300);
 
 

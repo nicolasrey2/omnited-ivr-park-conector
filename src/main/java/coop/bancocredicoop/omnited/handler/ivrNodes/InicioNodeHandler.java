@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handler para nodos de tipo "inicio". Inicia la sesión y avanza
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("inicio")
 public class InicioNodeHandler implements NodeHandler {
+  private static final Logger log = LoggerFactory.getLogger(InicioNodeHandler.class);
   /**
    * Imprime un log de inicio y devuelve el ID del siguiente nodo,
    * que será procesado por DiagramaMapper.
@@ -24,7 +27,7 @@ public class InicioNodeHandler implements NodeHandler {
   @Override
   public String handle(JsonNode botLimpio, JsonNode nodoIn, String from, String textoUsuario) {
     // Log de inicio (puedes usar canalMensajeria si prefieres enviar un mensaje)
-    System.out.println("INICIA BOT-IVR para canal=" + from);
+    log.info("INICIA BOT-IVR para canal={}", from);
 
     // Devuelve el nodo al que seguir
     return DiagramaUtils.obtenerTarget(botLimpio, nodoIn);

@@ -2,18 +2,18 @@ package coop.bancocredicoop.omnited.service.asterisk;
 
 import ch.loway.oss.ari4java.generated.models.*;
 import coop.bancocredicoop.omnited.service.ivr.IvrService;
-import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class AriMessageMapper {
   private IvrService ivrService;
-  private RedisService redisService;
+  private Logger log = LoggerFactory.getLogger(AriMessageMapper.class);
 
-  public AriMessageMapper(@Lazy IvrService ivrService, @Lazy RedisService redisService) {
+  public AriMessageMapper(@Lazy IvrService ivrService) {
     this.ivrService = ivrService;
-    this.redisService = redisService;
   }
 
   public void mapMessage(Message message) {
@@ -22,24 +22,25 @@ public class AriMessageMapper {
     }
     switch (message.getType()) {
       case "StasisStart":
+        log.info("StasisStart");
         handleStasisStart((StasisStart) message);
         break;
 
       case "ChannelDtmfReceived":
         ChannelDtmfReceived dtmf = (ChannelDtmfReceived) message;
-        System.out.println("Se recibio: " + dtmf.getDigit());
+        log.info("ChannelDtmfReceived, digit: {}", dtmf.getDigit());
         handleChannelDtmfReceived(dtmf);
         break;
 
       case "PlaybackFinished":
-        System.out.println("Playback finished");
         PlaybackFinished playbackFinished = (PlaybackFinished) message;
+        log.info("Playback finished: {}", playbackFinished.getPlayback().getId());
         handlePlaybackFinished(playbackFinished);
         break;
 
       // Agregá más casos según los eventos que uses
       default:
-        System.out.println("Evento ARI no manejado: " + message.getType());
+        log.warn("Evento ARI no manejado: {}", message.getType());
 
     }
   }
@@ -53,25 +54,7 @@ public class AriMessageMapper {
 
   private void handlePlaybackFinished(PlaybackFinished event) {
     String playbackId = event.getPlayback().getId();
-    String channelId = redisService.get("playback:" + playbackId);
-
-    if (channelId == null) {
-      System.out.println("Error en AriMessageMapper.handlePlaybackFinished no se " +
-          "encontro canal para playback con id: " + playbackId);
-      return;
-    }
-
-    redisService.delete("playback:" + playbackId);
-    System.out.println("recupero siguiente:" + channelId);
-    String siguienteId = redisService.get("siguiente:" + channelId);
-    if (siguienteId == null) {
-      System.out.println("No hay siguiente nodo cacheado AriMessageMapper.handlePlaybackFinished");
-      return;
-    }
-    redisService.delete("siguiente:" + channelId);
-    redisService.set("posicion:" + channelId, siguienteId, 300);
-    System.out.println("Se setea la posicion en " + channelId);
-    ivrService.playbackFinished(channelId, playbackId);
+    ivrService.playbackFinished(playbackId);
   }
 
 

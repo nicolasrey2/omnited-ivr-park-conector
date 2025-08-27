@@ -3,15 +3,20 @@ package coop.bancocredicoop.omnited.service.tts;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import coop.bancocredicoop.omnited.messages.AudioForChannel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class PiperTtsService {
+  private static final Logger log = LoggerFactory.getLogger(PiperTtsService.class);
+
 
   @Value("${piper.tts.endpoint}")
   private String uriEndpointTTS;
@@ -45,7 +50,7 @@ public class PiperTtsService {
     try {
       json = mapper.readTree(response.getBody());
     } catch (JsonProcessingException e) {
-      System.out.println("Error: " + e.getMessage());
+      log.error(e.getMessage());
       throw new RuntimeException(e);
     }
 
