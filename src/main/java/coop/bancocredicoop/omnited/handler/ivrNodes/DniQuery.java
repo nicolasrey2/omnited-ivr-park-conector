@@ -5,6 +5,7 @@ import coop.bancocredicoop.omnited.messages.CanalMensajeria;
 import coop.bancocredicoop.omnited.service.dni.DniQueryClient;
 import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
+import coop.bancocredicoop.omnited.service.ivr.PlaybackStateManager;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
@@ -17,18 +18,21 @@ public class DniQuery implements NodeHandler {
   private RedisService redisService;
   private CanalMensajeria canalMensajeria;
   private DniQueryClient dniQueryClient;
+  private PlaybackStateManager playbackStateManager;
 
 
-  public DniQuery(RedisService redisService,  CanalMensajeria canalMensajeria,  DniQueryClient dniQueryClient) {
+  public DniQuery(RedisService redisService,  CanalMensajeria canalMensajeria,
+                  DniQueryClient dniQueryClient, PlaybackStateManager playbackStateManager) {
     this.redisService = redisService;
     this.canalMensajeria = canalMensajeria;
     this.dniQueryClient = dniQueryClient;
+    this.playbackStateManager = playbackStateManager;
   }
 
 
   @Override
-  public String handle(JsonNode ivrLimpio, JsonNode nodo, String from, String textoUsuario) {
-    String redisKey = "IVR:" + from + ":dtmfAcumulado";
+  public String handle(JsonNode ivr, JsonNode nodo, String channelId, String textoUsuario) {
+    String redisKey = "IVR:" + channelId + ":dtmfAcumulado";
     String dniAcumulado = redisService.get(redisKey);
     String fullName = dniQueryClient.getFullName(dniAcumulado);
     String mensaje;
@@ -38,15 +42,11 @@ public class DniQuery implements NodeHandler {
     else {
       mensaje = "Su nombre completo es " + fullName.toLowerCase(Locale.ROOT);
     }
-
-
-    String siguienteId = DiagramaUtils.obtenerTarget(ivrLimpio, nodo);
     log.info("Mensaje obtenido del DNI: {}", mensaje);
 
-    redisService.set("siguiente:" + from, siguienteId, 300);
-    log.info("Seteo la key del siguiente nodo: {}", siguienteId);
+    playbackStateManager.storeNextNode(ivr, nodo, channelId);
 
-    canalMensajeria.enviarMensaje(from, mensaje);
+    canalMensajeria.enviarMensaje(channelId, mensaje);
 
     return null;
   }

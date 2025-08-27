@@ -43,7 +43,7 @@ public class RabbitQueueConfig {
      * @return
      */
     @Bean
-    public Binding bindingColaEntranteDB_WA(Queue colaEntranteDB_IVR1, TopicExchange exchange) {
+    public Binding bindingColaEntranteDB_IVR(Queue colaEntranteDB_IVR1, TopicExchange exchange) {
         return BindingBuilder.bind(colaEntranteDB_IVR1).to(exchange).with(routingKey + ".db_ivr1");
     }
 }

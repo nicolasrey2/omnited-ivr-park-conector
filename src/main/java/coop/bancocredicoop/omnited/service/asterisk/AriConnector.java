@@ -7,6 +7,7 @@ import ch.loway.oss.ari4java.generated.models.Playback;
 import ch.loway.oss.ari4java.tools.AriConnectionEvent;
 import ch.loway.oss.ari4java.tools.AriWSCallback;
 import ch.loway.oss.ari4java.tools.RestException;
+import coop.bancocredicoop.omnited.service.ivr.PlaybackStateManager;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -37,12 +38,12 @@ public class AriConnector {
   private ARI ari;
   private final AriMessageMapper ariMessageMapper;
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-  private final RedisService redisService;
+  private final PlaybackStateManager  playbackStateManager;
   private volatile boolean connected = false;
 
-  public AriConnector(AriMessageMapper ariMessageMapper, RedisService redisService) {
+  public AriConnector(AriMessageMapper ariMessageMapper, PlaybackStateManager playbackStateManager) {
     this.ariMessageMapper = ariMessageMapper;
-    this.redisService = redisService;
+    this.playbackStateManager = playbackStateManager;
   }
 
   @PostConstruct
@@ -104,7 +105,7 @@ public class AriConnector {
     try {
       log.info("Enviando audio a Asterisk: {}", url);
       Playback playback = ari.channels().play(channelId, url).execute();
-      redisService.set("playback:" + playback.getId(), channelId, 300);
+      playbackStateManager.storePlayback(playback.getId(), channelId);
       log.info("Playback ID: {}", playback);
     } catch (RestException e) {
       log.error("Error enviando audio a Asterisk: {}", e.getMessage());

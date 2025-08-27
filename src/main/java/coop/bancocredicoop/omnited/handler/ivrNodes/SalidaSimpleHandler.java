@@ -2,9 +2,8 @@ package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.messages.CanalMensajeria;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
-import coop.bancocredicoop.omnited.service.redis.RedisService;
+import coop.bancocredicoop.omnited.service.ivr.PlaybackStateManager;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,29 +11,25 @@ import org.slf4j.LoggerFactory;
 @Component("salidaSimple")
 public class SalidaSimpleHandler implements NodeHandler {
     private final Logger log = LoggerFactory.getLogger(SalidaSimpleHandler.class);
-    private RedisService redisService;
     private final CanalMensajeria canalMensajeria;
-    private final int TTL = 300;
+    private final PlaybackStateManager playbackStateManager;
 
     public SalidaSimpleHandler(
             CanalMensajeria canalMensajeria,
-            RedisService redisService
+            PlaybackStateManager playbackStateManager
     ) {
         this.canalMensajeria = canalMensajeria;
-        this.redisService = redisService;
+        this.playbackStateManager =  playbackStateManager;
     }
 
     @Override
-    public String handle(JsonNode botLimpio, JsonNode nodo, String from, String textoUsuario) {
-        String texto = nodo.get("data").get("text").asText();
-
-        String siguienteId = DiagramaUtils.obtenerTarget(botLimpio, nodo);
+    public String handle(JsonNode ivr, JsonNode node, String channelId, String textoUsuario) {
+        String texto = node.get("data").get("text").asText();
         log.info("Texto: {}", texto);
-        log.info("siguienteId: {}", siguienteId);
-        redisService.set("siguiente:" + from, siguienteId, 300);
 
+        playbackStateManager.storeNextNode(ivr, node, channelId);
 
-        canalMensajeria.enviarMensaje(from, texto);
+        canalMensajeria.enviarMensaje(channelId, texto);
 
         return null; // esperar PlaybackFinished
     }

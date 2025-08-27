@@ -5,7 +5,9 @@ import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component("digitMenu")
 public class DigitMenu implements NodeHandler {
   private static final Logger log = LoggerFactory.getLogger(DigitMenu.class);
   @Override
