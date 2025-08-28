@@ -52,11 +52,8 @@ public class AriMessageMapper {
     ivrService.handleDtmf(dtmf.getChannel(), dtmf.getDigit());
   }
 
-
   private void handlePlaybackFinished(PlaybackFinished event) {
     String playbackId = event.getPlayback().getId();
-
-    log.info("Playback finished manualmente: {}", playbackId);
     ivrService.playbackFinished(playbackId);
   }
 

@@ -105,7 +105,7 @@ public class AriConnector {
     try {
       log.info("Enviando audio a Asterisk: {}", url);
       Playback playback = ari.channels().play(channelId, url).execute();
-      playbackStateManager.storePlayback(playback.getId(), channelId);
+      playbackStateManager.storePlayback(channelId, playback.getId());
       log.info("Playback ID: {}", playback);
     } catch (RestException e) {
       log.error("Error enviando audio a Asterisk: {}", e.getMessage());
@@ -120,23 +120,6 @@ public class AriConnector {
       log.error("Error colgando el canal: {}. Error: {}", channelId, e.getMessage());
     }
   }
-
-  public void stopPlaybackIfIsPlaying(String channelId) {
-    /*
-    String playbackId = playbackStateManager.getPlaybackIdForChannel(channelId);
-    if (playbackId != null) {
-      try {
-        log.info("Deteniendo playback {} en canal {}", playbackId, channelId);
-        ari.playbacks().stop(playbackId).execute();
-        playbackStateManager.markStoppedByApp(playbackId);
-      } catch (Exception e) {
-        log.error("Error deteniendo playback {} en canal {}: {}", playbackId, channelId, e.getMessage());
-      }
-    }
-
-     */
-  }
-
 
 
   @PreDestroy

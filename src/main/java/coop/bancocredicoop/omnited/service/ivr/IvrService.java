@@ -34,8 +34,7 @@ public class IvrService {
 
   public void handleDtmf(Channel channel, String digit) {
     String channelId = channel.getId();
-    ariConnector.stopPlaybackIfIsPlaying(channelId);
-
+    // parar reproduccion si corresponde
     JsonNode diagrama = diagramaStore.getDiagram();
     diagramaProcessor.procesarMensaje(diagrama, channelId, digit);
   }
