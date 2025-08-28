@@ -45,19 +45,16 @@ public class PlaybackStateManager {
 
   public Playback advanceToNextNodeFromFinishedPlayback(String playbackId) {
     // buscamos playback por ID recorriendo el map
-    log.error("llego a 1");
     Playback playback = activePlaybacks.values().stream()
         .filter(p -> p.getId().equals(playbackId))
         .findFirst()
         .orElseThrow(() -> new MishandledStateException("Playback con id " + playbackId + " no encontrado"));
-    log.error("llego a 2");
+
     String channelId = playback.getChannelId();
     String nextNodeId = getNextNodeFor(channelId);
-    log.error("llego a 3");
     if (nextNodeId == null) {
       throw new MishandledStateException("No hay siguiente nodo cacheado");
     }
-    log.error("llego a 4");
     applyNextPositionInCache(channelId, nextNodeId);
 
     log.info("PlaybackActivo con id: {} se finalizo, se continua con el ivr en {}", playback.getId(), nextNodeId);
