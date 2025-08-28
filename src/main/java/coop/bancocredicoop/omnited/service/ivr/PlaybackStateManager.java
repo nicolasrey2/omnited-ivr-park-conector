@@ -2,24 +2,27 @@ package coop.bancocredicoop.omnited.service.ivr;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.exceptions.MishandledStateException;
+import coop.bancocredicoop.omnited.service.asterisk.AriConnector;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import coop.bancocredicoop.omnited.entity.Playback;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class PlaybackStateManager {
   private final Logger log = LoggerFactory.getLogger(PlaybackStateManager.class);
   private final Integer TTL = 300;
-  private final List<Playback> activePlaybacks;
+  private final ConcurrentMap<String, Playback> activePlaybacks = new ConcurrentHashMap<>();
   private final RedisService redisService;
+  private final AriConnector ariConnector;
 
-  public PlaybackStateManager(RedisService redisService) {
+  public PlaybackStateManager(RedisService redisService, @Lazy AriConnector ariConnector) {
     this.redisService = redisService;
-    this.activePlaybacks = new ArrayList<>();
+    this.ariConnector = ariConnector;
   }
 
   public void storeNextNode(JsonNode ivr, JsonNode actualNode, String channelId) {
@@ -35,39 +38,32 @@ public class PlaybackStateManager {
 
   public void storePlayback(String channelId, String playbackId) {
     Playback playback = new Playback(playbackId, channelId);
-    this.activePlaybacks.add(playback);
+    activePlaybacks.put(channelId, playback);
     log.info("Playback: [{}, {}] fue almacenado para manejar estado", playback.getId(), playback.getChannelId());
   }
 
 
-  public String advanceToNextNodeFromFinishedPlayback(String playbackFinalizated) {
-    Playback playback = getPlayback(playbackFinalizated);
-    if (playback == null) {
-      log.error("playback con id: {} no encontrado", playbackFinalizated);
-    }
+  public Playback advanceToNextNodeFromFinishedPlayback(String playbackId) {
+    // buscamos playback por ID recorriendo el map
+    log.error("llego a 1");
+    Playback playback = activePlaybacks.values().stream()
+        .filter(p -> p.getId().equals(playbackId))
+        .findFirst()
+        .orElseThrow(() -> new MishandledStateException("Playback con id " + playbackId + " no encontrado"));
+    log.error("llego a 2");
     String channelId = playback.getChannelId();
-    if (channelId == null) {
-      log.error("Error no se encontro canal para playback con id: {}", playbackFinalizated);
-      throw new MishandledStateException("Error no se encontro canal para playback con id: " + playbackFinalizated);
-    }
     String nextNodeId = getNextNodeFor(channelId);
+    log.error("llego a 3");
     if (nextNodeId == null) {
-      log.error("No hay siguiente nodo cacheado");
       throw new MishandledStateException("No hay siguiente nodo cacheado");
     }
+    log.error("llego a 4");
     applyNextPositionInCache(channelId, nextNodeId);
 
     log.info("PlaybackActivo con id: {} se finalizo, se continua con el ivr en {}", playback.getId(), nextNodeId);
 
-    this.activePlaybacks.remove(playback);
-
-    return channelId;
-  }
-
-  private Playback getPlayback(String playbackId) {
-    //return redisService.get("playback:" + playbackId);
-    return this.activePlaybacks.stream().filter(playback -> playback.getId().equals(playbackId))
-        .findFirst().orElse(null);
+    activePlaybacks.remove(channelId); // aseguramos eliminarlo
+    return playback;
   }
 
   private String getNextNodeFor(String channelId) {
@@ -80,4 +76,17 @@ public class PlaybackStateManager {
     log.info("Se setea la posicion de {} en {}", channelId, nextNodeId);
   }
 
+  public boolean hasActivePlayback(String channelId) {
+    return activePlaybacks.containsKey(channelId);
+  }
+
+  public Playback stopPlaybackFor(String channelId) {
+    Playback playback = activePlaybacks.get(channelId);
+    if (playback != null) {
+      ariConnector.stopPlayback(playback.getId());
+      return playback;
+    }
+    log.error("No se encontró playback activo para el canal: {}", channelId);
+    return null;
+  }
 }

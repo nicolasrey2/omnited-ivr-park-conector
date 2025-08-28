@@ -121,6 +121,14 @@ public class AriConnector {
     }
   }
 
+  public void stopPlayback(String playbackId) {
+    try {
+      ari.playbacks().stop(playbackId).execute();
+    } catch (RestException e) {
+      log.error("Error deteniendo el playback: {}. Error: {}", playbackId, e.getMessage());
+    }
+  }
+
 
   @PreDestroy
   public void shutdown() {

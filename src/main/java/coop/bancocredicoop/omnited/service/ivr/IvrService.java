@@ -2,9 +2,9 @@ package coop.bancocredicoop.omnited.service.ivr;
 
 import ch.loway.oss.ari4java.generated.models.Channel;
 import com.fasterxml.jackson.databind.JsonNode;
+import coop.bancocredicoop.omnited.entity.Playback;
 import coop.bancocredicoop.omnited.service.asterisk.AriConnector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,14 +34,20 @@ public class IvrService {
 
   public void handleDtmf(Channel channel, String digit) {
     String channelId = channel.getId();
-    // parar reproduccion si corresponde
-    JsonNode diagrama = diagramaStore.getDiagram();
-    diagramaProcessor.procesarMensaje(diagrama, channelId, digit);
+    if(! playbackStateManager.hasActivePlayback(channelId)) {
+      JsonNode diagrama = diagramaStore.getDiagram();
+      diagramaProcessor.procesarMensaje(diagrama, channelId, digit);
+    }
+    else { //tiene un playback activo
+      Playback playback = playbackStateManager.stopPlaybackFor(channelId);
+      playback.addDtmf(digit);
+    }
   }
 
   public void playbackFinished(String playbackId) {
-    String channelId = playbackStateManager.advanceToNextNodeFromFinishedPlayback(playbackId);
+    Playback playback = playbackStateManager.advanceToNextNodeFromFinishedPlayback(playbackId);
 
-    diagramaProcessor.procesarMensaje(diagramaStore.getDiagram(), channelId, "");
+    diagramaProcessor.procesarMensaje(diagramaStore.getDiagram(),
+        playback.getChannelId(), playback.getDtmfAcumulated());
   }
 }
