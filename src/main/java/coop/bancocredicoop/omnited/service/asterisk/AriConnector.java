@@ -121,6 +121,23 @@ public class AriConnector {
     }
   }
 
+  public void stopPlaybackIfIsPlaying(String channelId) {
+    /*
+    String playbackId = playbackStateManager.getPlaybackIdForChannel(channelId);
+    if (playbackId != null) {
+      try {
+        log.info("Deteniendo playback {} en canal {}", playbackId, channelId);
+        ari.playbacks().stop(playbackId).execute();
+        playbackStateManager.markStoppedByApp(playbackId);
+      } catch (Exception e) {
+        log.error("Error deteniendo playback {} en canal {}: {}", playbackId, channelId, e.getMessage());
+      }
+    }
+
+     */
+  }
+
+
 
   @PreDestroy
   public void shutdown() {

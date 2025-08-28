@@ -2,6 +2,9 @@ package coop.bancocredicoop.omnited.service.ivr;
 
 import ch.loway.oss.ari4java.generated.models.Channel;
 import com.fasterxml.jackson.databind.JsonNode;
+import coop.bancocredicoop.omnited.service.asterisk.AriConnector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,9 @@ public class IvrService {
   private final DiagramaProcessor diagramaProcessor;
   private final DiagramaStore diagramaStore;
   private final PlaybackStateManager playbackStateManager;
+
+  @Autowired
+  private AriConnector ariConnector;
 
   public IvrService(DiagramaProcessor diagramaProcessor, DiagramaStore diagramaStore,
                     PlaybackStateManager playbackStateManager) {
@@ -27,10 +33,11 @@ public class IvrService {
   }
 
   public void handleDtmf(Channel channel, String digit) {
-    //TODO se deberia pausar el playback del canal y pasar al siguiente nodo (se pasa solo si es nodo de salida)
-    String from = channel.getId();
+    String channelId = channel.getId();
+    ariConnector.stopPlaybackIfIsPlaying(channelId);
+
     JsonNode diagrama = diagramaStore.getDiagram();
-    diagramaProcessor.procesarMensaje(diagrama, from, digit);
+    diagramaProcessor.procesarMensaje(diagrama, channelId, digit);
   }
 
   public void playbackFinished(String playbackId) {

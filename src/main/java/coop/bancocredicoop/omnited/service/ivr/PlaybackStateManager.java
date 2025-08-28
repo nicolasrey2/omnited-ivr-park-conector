@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 @Service
 public class PlaybackStateManager {
   private final Logger log = LoggerFactory.getLogger(PlaybackStateManager.class);
   private final Integer TTL = 300;
 
   private final RedisService redisService;
+
   public PlaybackStateManager(RedisService redisService) {
     this.redisService = redisService;
   }
@@ -28,6 +32,7 @@ public class PlaybackStateManager {
     log.info("Playback con ID: {} y channelId: {} fue almacenado en redis para manejar estado", playbackId, channelId);
   }
 
+
   public String advanceToNextNodeFromFinishedPlayback(String playbackFinalizated) {
     String channelId = redisService.get("playback:" + playbackFinalizated);
 
@@ -37,6 +42,8 @@ public class PlaybackStateManager {
     }
 
     redisService.delete("playback:" + playbackFinalizated);
+
+
     log.info("recupero siguiente:{}", channelId);
     String nextNodeId = redisService.get("siguiente:" + channelId);
     if (nextNodeId == null) {
@@ -51,6 +58,5 @@ public class PlaybackStateManager {
 
     return channelId;
   }
-
 
 }

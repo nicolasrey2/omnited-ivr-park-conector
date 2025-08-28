@@ -34,7 +34,7 @@ public class AriMessageMapper {
 
       case "PlaybackFinished":
         PlaybackFinished playbackFinished = (PlaybackFinished) message;
-        log.info("Playback finished: {}", playbackFinished.getPlayback().getId());
+        log.info("Playback finished por evento: {}", playbackFinished.getPlayback().getId());
         handlePlaybackFinished(playbackFinished);
         break;
 
@@ -48,12 +48,15 @@ public class AriMessageMapper {
     ivrService.startFlow(message.getChannel());
   }
 
-  private void handleChannelDtmfReceived(ChannelDtmfReceived message) {
-    ivrService.handleDtmf(message.getChannel(), message.getDigit());
+  private void handleChannelDtmfReceived(ChannelDtmfReceived dtmf) {
+    ivrService.handleDtmf(dtmf.getChannel(), dtmf.getDigit());
   }
+
 
   private void handlePlaybackFinished(PlaybackFinished event) {
     String playbackId = event.getPlayback().getId();
+
+    log.info("Playback finished manualmente: {}", playbackId);
     ivrService.playbackFinished(playbackId);
   }
 
