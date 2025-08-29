@@ -1,16 +1,16 @@
 package coop.bancocredicoop.omnited.service.ivr;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
 import java.util.HashSet;
 import java.util.Set;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Métodos auxiliares para navegación y búsqueda de nodos en el JSON del bot.
  */
 public final class DiagramaUtils {
-
+    private static Logger log = LoggerFactory.getLogger(DiagramaUtils.class);
     private DiagramaUtils() {
         /* no instanciable */ }
 
@@ -86,6 +86,7 @@ public final class DiagramaUtils {
      */
     public static String buscarEdgePorHandle(JsonNode ivrLimpio, JsonNode nodo, String handle) {
         if (!ivrLimpio.has("edges")) {
+            log.error("El ivr no tiene edges");
             return null;
         }
         String id = nodo.get("id").asText();
@@ -97,6 +98,7 @@ public final class DiagramaUtils {
                 return e.get("target").asText();
             }
         }
+        log.error("no se encontro por handle {}", handle);
         return null;
     }
 

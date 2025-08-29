@@ -7,8 +7,6 @@ import ch.loway.oss.ari4java.generated.models.Playback;
 import ch.loway.oss.ari4java.tools.AriConnectionEvent;
 import ch.loway.oss.ari4java.tools.AriWSCallback;
 import ch.loway.oss.ari4java.tools.RestException;
-import coop.bancocredicoop.omnited.service.ivr.PlaybackStateManager;
-import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,16 +32,13 @@ public class AriConnector {
   @Value("${ari.app}")
   private String app;
 
-
   private ARI ari;
   private final AriMessageMapper ariMessageMapper;
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-  private final PlaybackStateManager  playbackStateManager;
   private volatile boolean connected = false;
 
-  public AriConnector(AriMessageMapper ariMessageMapper, PlaybackStateManager playbackStateManager) {
+  public AriConnector(AriMessageMapper ariMessageMapper) {
     this.ariMessageMapper = ariMessageMapper;
-    this.playbackStateManager = playbackStateManager;
   }
 
   @PostConstruct
@@ -99,25 +94,26 @@ public class AriConnector {
     }
   }
 
-  public void play(String channelId, String soundFilename) {
-    String sound = FilenameUtils.removeExtension(soundFilename);
-    String url = "sound:" + sound;
-    try {
-      log.info("Enviando audio a Asterisk: {}", url);
-      Playback playback = ari.channels().play(channelId, url).execute();
-      playbackStateManager.storePlayback(channelId, playback.getId());
-      log.info("Playback ID: {}", playback);
-    } catch (RestException e) {
-      log.error("Error enviando audio a Asterisk: {}", e.getMessage());
-    }
-  }
-
   public void hangupChannel(String channelId) {
     try {
       ari.channels().hangup(channelId).execute();
       log.info("Hangup channel ID: {}", channelId);
     } catch (RestException e) {
       log.error("Error colgando el canal: {}. Error: {}", channelId, e.getMessage());
+    }
+  }
+
+  public Playback play(String channelId, String soundFilename) {
+    String sound = FilenameUtils.removeExtension(soundFilename);
+    String url = "sound:" + sound;
+    try {
+      log.info("Enviando audio a Asterisk: {}", url);
+      Playback playback = ari.channels().play(channelId, url).execute();
+      log.info("Playback ID: {}", playback);
+      return playback;
+    } catch (RestException e) {
+      log.error("Error enviando audio a Asterisk: {}", e.getMessage());
+      throw new RuntimeException("Error enviando audio a Asterisk: " + e.getMessage());
     }
   }
 

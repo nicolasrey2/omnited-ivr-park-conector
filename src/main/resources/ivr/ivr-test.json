@@ -33,12 +33,16 @@
         "id": "5",
         "type": "salidaSimple",
         "data": {
-          "text": "Gracias por Comunicarse. Para Tarjetas en distribución marque 1. Para Denuncias por robo o extravío marque 2. Para Cuotificación marque 3"
+          "text": "Gracias por Comunicarse."
         }
       },
       {
         "id": "6",
         "type": "digitMenu",
+        "cantidadReintentos" : "3",
+        "data": {
+          "text": "Para Tarjetas en distribución marque 1. Para Denuncias por robo o extravío marque 2. Para Cuotificación marque 3"
+        },
         "optionsList": [
           {
             "id": 1,

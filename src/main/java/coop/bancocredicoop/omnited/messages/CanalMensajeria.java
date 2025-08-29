@@ -1,10 +1,14 @@
 package coop.bancocredicoop.omnited.messages;
 
+import ch.loway.oss.ari4java.generated.models.Playback;
+
 public interface CanalMensajeria {
     /**
      * Envía un mensaje de texto al destinatario.
-     * @param destinatario identificador de usuario (p.ej. número de WhatsApp, o "console-user")
+     * @param destinatario identificador de usuario (generalmente channel id por ahora)
      * @param texto       cuerpo del mensaje
      */
-    void enviarMensaje(String destinatario, String texto);
+    Playback enviarMensaje(String destinatario, String texto);
+
+    void stopPlayback(String playbackId);
 }

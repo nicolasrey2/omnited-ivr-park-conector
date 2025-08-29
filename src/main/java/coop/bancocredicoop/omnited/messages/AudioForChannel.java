@@ -1,5 +1,6 @@
 package coop.bancocredicoop.omnited.messages;
 
+import ch.loway.oss.ari4java.generated.models.Playback;
 import coop.bancocredicoop.omnited.service.asterisk.AriConnector;
 import coop.bancocredicoop.omnited.service.tts.PiperTtsService;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,16 @@ public class AudioForChannel implements  CanalMensajeria {
   }
 
   @Override
-  public void enviarMensaje(String channelId, String textToSendToChannel) {
+  public Playback enviarMensaje(String channelId, String textToSendToChannel) {
     log.info("Se envia el mensaje: {} , sobre el canal: {}", textToSendToChannel, channelId);
     String audioFilename = piperTtsService.textToSpeech(textToSendToChannel);
     log.info("audio generado: {}", audioFilename);
-    ariConnector.play(channelId, audioFilename);
+
+    return ariConnector.play(channelId, audioFilename);
+  }
+
+  @Override
+  public void stopPlayback(String playbackId) {
+    ariConnector.stopPlayback(playbackId);
   }
 }
