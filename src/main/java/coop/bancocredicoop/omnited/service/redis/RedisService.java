@@ -108,4 +108,5 @@ public class RedisService {
     public void deleteHash(String from) {
         redisTemplate.delete("vars:" + from);
     }
+
 }

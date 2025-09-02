@@ -14,7 +14,10 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
   public String handle(JsonNode ivr, JsonNode node, String channelId, String textoUsuario) {
 
     if (textoUsuario.isEmpty()) { // primera iteración
-      String texto = primerOutput(node);
+      String texto = primerOutput(node, channelId);
+      if (texto.isEmpty()) {
+        return null;
+      }
       messageService.sendMessage(channelId, texto);
       return null; // esperar evento
     }
@@ -37,7 +40,7 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
     return null;
   }
 
-  protected abstract String primerOutput(JsonNode node);
+  protected abstract String primerOutput(JsonNode node, String channelId);
 
   /**
    * Qué hacer si llega un DTMF mientras suena el playback

@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 @Component
 public class AriMessageMapper {
-  private IvrService ivrService;
-  private Logger log = LoggerFactory.getLogger(AriMessageMapper.class);
+  private final IvrService ivrService;
+  private final Logger log = LoggerFactory.getLogger(AriMessageMapper.class);
 
   public AriMessageMapper(@Lazy IvrService ivrService) {
     this.ivrService = ivrService;
@@ -20,9 +20,9 @@ public class AriMessageMapper {
     if(message == null || message.getType() == null) {
       return;
     }
+    log.info(message.getType());
     switch (message.getType()) {
       case "StasisStart":
-        log.info("StasisStart");
         handleStasisStart((StasisStart) message);
         break;
 

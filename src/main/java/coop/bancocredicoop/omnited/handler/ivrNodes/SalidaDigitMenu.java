@@ -18,7 +18,7 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
   }
 
   @Override
-  protected String primerOutput(JsonNode nodo) {
+  protected String primerOutput(JsonNode nodo, String channelId) {
     String texto = nodo.get("data").get("text").asText();
     log.info("Texto: {}", texto);
     return texto;
@@ -44,6 +44,7 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
     }
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, selectedHandler);
   }
+
 
   @Override
   protected String onPlaybackFinished(JsonNode ivr, JsonNode node, String channelId) {

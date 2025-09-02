@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-  private CanalMensajeria canalMensajeria;
-  private RedisService redis;
-  private int TTS = 300;
+  private final CanalMensajeria canalMensajeria;
+  private final RedisService redis;
+  private final int TTS = 300;
 
   public MessageService(CanalMensajeria canalMensajeria, RedisService redisService) {
     this.canalMensajeria = canalMensajeria;

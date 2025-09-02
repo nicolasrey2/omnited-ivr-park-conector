@@ -1,4 +1,5 @@
-1 -> logica para interrumpir audio al recibir un dtmf
-2 -> analizar con martin que estadisticas debo generar con respecto al ivr
-3 -> analizar con martin funcionamiento general del parking
-4 -> analizar conexion con adapter de extensiones (inicialmente relacion con ivr)
+terminar flujo de nodos como en drawio
+
+1 -> analizar con martin que estadisticas debo generar con respecto al ivr
+2 -> analizar con martin funcionamiento general del parking
+3 -> analizar conexion con adapter de extensiones (inicialmente relacion con ivr)

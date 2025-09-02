@@ -12,7 +12,7 @@
         "selectable": false
       },
       {
-        "id": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+        "id": "2",
         "type": "salidaSimple",
         "data": {
           "text": "Bienvenido al Banco Credicoop. Ingrese su DNI"
@@ -22,18 +22,40 @@
         "id": "3",
         "type": "dtmfInput",
         "data": {
-          "cantidad": "8"
+          "cantidadMinima": "6",
+          "variable": "dni"
         }
       },
       {
         "id": "4",
-        "type": "dniQuery"
+        "type": "restClientNode",
+        "data": {
+          "url": "http://sesb2303ax/listacandidatos-creditos-txt/rest/api/v1/listacandidatos/F/nrodoc/{dni}",
+          "method": "GET",
+          "PathValues": [
+            "dni"
+          ],
+          "headers": {
+            "Accept": "application/json"
+          },
+          "correctStates": [
+            200,
+            201
+          ]
+        }
+      },
+      {
+        "id": "99",
+        "type": "salidaSimple",
+        "data": {
+          "text": "Llame otro dia"
+        }
       },
       {
         "id": "5",
         "type": "salidaSimple",
         "data": {
-          "text": "Gracias por Comunicarse."
+          "text": "Gracias por Comunicarse. Su DNI existe"
         }
       },
       {
@@ -95,26 +117,20 @@
       {
         "type": "smoothstep",
         "source": "start-node",
-        "target": "59e1ecca-2070-4f78-a43b-82664aa133b9",
-        "id": "xy-edge__start-node-59e1ecca-2070-4f78-a43b-82664aa133b9"
+        "target": "2",
+        "id": "xy-edge__start-node-2"
       },
       {
         "type": "smoothstep",
-        "source": "59e1ecca-2070-4f78-a43b-82664aa133b9",
+        "source": "2",
         "target": "3",
-        "id": "xy-edge__59e1ecca-2070-4f78-a43b-82664aa133b9-3"
+        "id": "xy-edge__2-3"
       },
       {
         "type": "smoothstep",
         "source": "3",
         "target": "4",
         "id": "xy-edge__3-4"
-      },
-      {
-        "type": "smoothstep",
-        "source": "4",
-        "target": "5",
-        "id": "xy-edge__4-5"
       },
       {
         "type": "smoothstep",
@@ -166,6 +182,26 @@
         "source": "10",
         "target": "11",
         "id": "xy-edge__10-11"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "ok",
+        "target": "5",
+        "id": "xy-edge__4-ok-5"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "error",
+        "target": "99",
+        "id": "xy-edge__4-error-99"
+      },
+      {
+        "type": "smoothstep",
+        "source": "99",
+        "target": "11",
+        "id": "xy-edge__99-11"
       }
     ]
   }
