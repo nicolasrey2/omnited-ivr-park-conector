@@ -45,6 +45,14 @@
         }
       },
       {
+        "id": "100",
+        "type": "superoIntentos",
+        "data": {
+          "cantidadReintentos": "3",
+          "ttl": "20"
+        }
+      },
+      {
         "id": "99",
         "type": "salidaSimple",
         "data": {
@@ -111,6 +119,13 @@
       {
         "id": "11",
         "type": "hangup"
+      },
+      {
+        "id": "101",
+        "type": "salidaSimple",
+        "data": {
+          "text": "dni incorrecto, vuelva a ingresarlo"
+        }
       }
     ],
     "edges": [
@@ -194,8 +209,28 @@
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "error",
+        "target": "100",
+        "id": "xy-edge__4-error-100"
+      },
+      {
+        "type": "smoothstep",
+        "source": "100",
+        "sourceHandle": "siSupero",
         "target": "99",
-        "id": "xy-edge__4-error-99"
+        "id": "xy-edge__100-siSupero-99"
+      },
+      {
+        "type": "smoothstep",
+        "source": "100",
+        "sourceHandle": "noSupero",
+        "target": "101",
+        "id": "xy-edge__100-noSupero-101"
+      },
+      {
+        "type": "smoothstep",
+        "source": "101",
+        "target": "3",
+        "id": "xy-edge__101-3"
       },
       {
         "type": "smoothstep",

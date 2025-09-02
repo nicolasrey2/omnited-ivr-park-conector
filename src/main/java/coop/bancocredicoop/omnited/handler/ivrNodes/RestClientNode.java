@@ -58,13 +58,18 @@ public class RestClientNode implements NodeHandler {
   private Map<String, String> getValues(JsonNode data, String channelId) {
     JsonNode pathValuesNode = data.get("PathValues");
     Map<String, String> values = new HashMap<>();
+
     if (pathValuesNode != null && pathValuesNode.isArray()) {
-      values = StreamSupport.stream(pathValuesNode.spliterator(), false)
-          .collect(Collectors.toMap(
-              JsonNode::asText,
-              pv -> redisService.get(pv.asText() + ":" + channelId)
-          ));
+      for (JsonNode pv : pathValuesNode) {
+        String key = pv.asText() + ":" + channelId;
+        String value = redisService.get(key);
+        values.put(pv.asText(), value);
+
+        // Borrar key de Redis después de leer
+        redisService.delete(key);
+      }
     }
+
     return values;
   }
 

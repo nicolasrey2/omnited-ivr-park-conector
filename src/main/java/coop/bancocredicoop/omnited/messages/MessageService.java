@@ -1,7 +1,6 @@
-package coop.bancocredicoop.omnited.handler.ivrNodes;
+package coop.bancocredicoop.omnited.messages;
 
 import ch.loway.oss.ari4java.generated.models.Playback;
-import coop.bancocredicoop.omnited.messages.CanalMensajeria;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Service;
 
