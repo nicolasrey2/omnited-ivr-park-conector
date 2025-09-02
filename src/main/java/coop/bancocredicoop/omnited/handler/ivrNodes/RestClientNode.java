@@ -65,7 +65,7 @@ public class RestClientNode implements NodeHandler {
         String value = redisService.get(key);
         values.put(pv.asText(), value);
 
-        // Borrar key de Redis después de leer
+        // Borrar key de Redis después de leer (!ANALIZAR)
         redisService.delete(key);
       }
     }

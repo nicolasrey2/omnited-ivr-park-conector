@@ -53,7 +53,7 @@
         }
       },
       {
-        "id": "99",
+        "id": "102",
         "type": "salidaSimple",
         "data": {
           "text": "Llame otro dia"
@@ -117,7 +117,7 @@
         }
       },
       {
-        "id": "11",
+        "id": "9999",
         "type": "hangup"
       },
       {
@@ -195,8 +195,8 @@
       {
         "type": "smoothstep",
         "source": "10",
-        "target": "11",
-        "id": "xy-edge__10-11"
+        "target": "9999",
+        "id": "xy-edge__10-9999"
       },
       {
         "type": "smoothstep",
@@ -216,8 +216,8 @@
         "type": "smoothstep",
         "source": "100",
         "sourceHandle": "siSupero",
-        "target": "99",
-        "id": "xy-edge__100-siSupero-99"
+        "target": "102",
+        "id": "xy-edge__100-siSupero-102"
       },
       {
         "type": "smoothstep",
@@ -234,9 +234,9 @@
       },
       {
         "type": "smoothstep",
-        "source": "99",
-        "target": "11",
-        "id": "xy-edge__99-11"
+        "source": "102",
+        "target": "9999",
+        "id": "xy-edge__102-9999"
       }
     ]
   }
