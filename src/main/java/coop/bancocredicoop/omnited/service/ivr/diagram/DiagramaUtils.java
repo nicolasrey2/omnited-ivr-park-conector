@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.service.ivr;
+package coop.bancocredicoop.omnited.service.ivr.diagram;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.HashSet;

@@ -1,8 +1,8 @@
 package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaProcessor;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaProcessor;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.context.annotation.Lazy;

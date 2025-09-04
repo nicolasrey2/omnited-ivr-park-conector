@@ -38,9 +38,8 @@ public class AriMessageMapper {
         handlePlaybackFinished(playbackFinished);
         break;
 
-      // Agregá más casos según los eventos que uses
       default:
-        log.warn("Evento ARI no manejado: {}", message.getType());
+        log.info("Evento ARI no manejado: {}", message.getType());
 
     }
   }

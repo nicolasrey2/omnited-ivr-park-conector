@@ -1,0 +1,4 @@
+### GET request to example server
+GET http://sesb2303ax/listacandidatos-creditos-txt/rest/api/v1/listacandidatos/F/nrodoc/46557929
+Accept: application/json
+###

@@ -2,6 +2,8 @@ package coop.bancocredicoop.omnited.service.ivr;
 
 import ch.loway.oss.ari4java.generated.models.Channel;
 import com.fasterxml.jackson.databind.JsonNode;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaProcessor;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaStore;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;

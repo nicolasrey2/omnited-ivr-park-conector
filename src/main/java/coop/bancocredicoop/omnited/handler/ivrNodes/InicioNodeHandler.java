@@ -1,7 +1,7 @@
 package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;

@@ -1,7 +1,8 @@
 package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import coop.bancocredicoop.omnited.service.restClient.RestClient;
@@ -9,14 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 @Component("restClientNode")
 public class RestClientNode implements NodeHandler {
   private static final Logger log = LoggerFactory.getLogger(RestClientNode.class);
+  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final int tts = 20;
 
   private final RedisService redisService;
   private final RestClient restClient;
@@ -47,12 +48,67 @@ public class RestClientNode implements NodeHandler {
     log.info("Respuesta del endpoint {}: {}", url, response.getBody());
 
     if (! correctStatues.contains(response.getStatusCodeValue())) { // error
-      log.error("Respuesta del endpoint {}: cod: {}; body: {}", url, response.getStatusCodeValue(), response.getBody());
+      log.info("Error al consultar el endpoint {}: cod: {}; body: {}", url,
+          response.getStatusCodeValue(), response.getBody());
+
+      //TODO analizar: Si es error funcional (ej: 400 o 404) -> borro variables de redis
+      if (response.getStatusCodeValue() == 400 || response.getStatusCodeValue() == 404) {
+        for (String variable : values.keySet()) {
+          redisService.delete(variable + ":" + channelId);
+          log.info("Borrada variable {} de Redis para canal {}", variable, channelId);
+        }
+      }
+
+      handleRetries(channelId);
       return DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
     }
 
-    //TODO analizar setear variables redis para pasarselas al nodo ok
+    clearRetries(channelId);
+    setVars(channelId, response.getBody(), data.get("variablesASetear"));
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, "ok");
+  }
+
+  private void handleRetries(String channelId) {
+    String cantActualStr = redisService.get("cantidadReintentos:" + channelId);
+    if (cantActualStr == null) {
+      cantActualStr = "0";
+    }
+    int cantActual = Integer.parseInt(cantActualStr);
+
+    redisService.set("cantidadReintentos:" + channelId, String.valueOf(cantActual+1), tts);
+  }
+
+  private void clearRetries(String channelId) {
+    redisService.delete("cantidadReintentos:" + channelId);
+  }
+
+  private void setVars(String channelId, String responseBody, JsonNode variablesASetear) {
+    if (variablesASetear == null || !variablesASetear.isArray()) {
+      return;
+    }
+
+    try {
+      JsonNode responseJson = objectMapper.readTree(responseBody);
+
+      for (JsonNode varNode : variablesASetear) {
+        String variable = varNode.asText();
+
+        // buscamos el valor en el JSON de respuesta
+        JsonNode valorNode = responseJson.get(variable);
+        if (valorNode != null && !valorNode.isNull()) {
+          String valor = valorNode.asText();
+
+          // lo guardamos en Redis con la key var:channelId
+          redisService.set(variable + ":" + channelId, valor, tts);
+          log.info("Seteada variable {}={} para canal {}", variable, valor, channelId);
+        } else {
+          log.error("Variable {} no encontrada en la respuesta del endpoint", variable);
+        }
+      }
+    } catch (Exception e) {
+      log.error("Error procesando responseBody en setVars: {}", e.getMessage(), e);
+    }
+
   }
 
   private Map<String, String> getValues(JsonNode data, String channelId) {
@@ -64,9 +120,6 @@ public class RestClientNode implements NodeHandler {
         String key = pv.asText() + ":" + channelId;
         String value = redisService.get(key);
         values.put(pv.asText(), value);
-
-        // Borrar key de Redis después de leer (!ANALIZAR)
-        redisService.delete(key);
       }
     }
 

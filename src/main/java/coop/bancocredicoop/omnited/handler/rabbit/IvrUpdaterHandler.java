@@ -1,7 +1,7 @@
 package coop.bancocredicoop.omnited.handler.rabbit;
 
 import coop.bancocredicoop.omnited.entity.IVR;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaStore;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaStore;
 import coop.bancocredicoop.omnited.service.rabbit.RabbitMessageHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

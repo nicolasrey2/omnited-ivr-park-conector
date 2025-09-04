@@ -1,5 +1,12 @@
-terminar flujo de nodos como en drawio
+validar funcionamiento de setear variables en RestClientNode
+validar que funciona bien la interpolacion de variables en SalidaSimple y SalidaDigitMenu
+validar que SuperoIntentos sigue funcionando
 
-1 -> analizar con martin que estadisticas debo generar con respecto al ivr
-2 -> analizar con martin funcionamiento general del parking
+ver como medir el tiempo en un nodo por evento
+
+
+----------------------------------------------------------------------
+
+1 -> analizar que estadisticas debo generar con respecto al ivr
+2 -> analizar funcionamiento general del parking
 3 -> analizar conexion con adapter de extensiones (inicialmente relacion con ivr)

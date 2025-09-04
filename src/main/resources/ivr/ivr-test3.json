@@ -41,6 +41,10 @@
           "correctStates": [
             200,
             201
+          ],
+          "variablesASetear": [
+            "nombre",
+            "apellidoRazonSocial"
           ]
         }
       },
@@ -48,8 +52,7 @@
         "id": "100",
         "type": "superoIntentos",
         "data": {
-          "cantidadReintentos": "3",
-          "ttl": "20"
+          "cantidadReintentos": "3"
         }
       },
       {
@@ -63,7 +66,7 @@
         "id": "5",
         "type": "salidaSimple",
         "data": {
-          "text": "Gracias por Comunicarse. Su DNI existe"
+          "text": "Gracias por Comunicarse. Su DNI existe y es {dni}"
         }
       },
       {

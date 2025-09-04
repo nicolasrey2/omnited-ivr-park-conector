@@ -1,6 +1,5 @@
-package coop.bancocredicoop.omnited.service.ivr;
+package coop.bancocredicoop.omnited.service.ivr.diagram;
 
-import coop.bancocredicoop.omnited.handler.rabbit.IvrUpdaterHandler;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;

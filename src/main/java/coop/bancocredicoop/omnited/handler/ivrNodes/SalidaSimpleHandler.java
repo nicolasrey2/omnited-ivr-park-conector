@@ -2,11 +2,12 @@ package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.messages.MessageService;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaUtils;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @Component("salidaSimple")
 public class SalidaSimpleHandler extends AbstractSalidaHandler {
@@ -14,16 +15,18 @@ public class SalidaSimpleHandler extends AbstractSalidaHandler {
     private final RedisService redisService;
 
     public SalidaSimpleHandler(MessageService messageService, RedisService redisService) {
-      super(messageService);
+      super(messageService, redisService);
       this.redisService = redisService;
     }
 
     @Override
     protected String primerOutput(JsonNode node, String channelId) {
-        String texto = node.get("data").get("text").asText();
+        String textoSinVars = node.get("data").get("text").asText();
+        String texto = resolveVars(textoSinVars, channelId);
         log.info("Texto: {}", texto);
         return texto;
     }
+
 
     @Override
     protected void logicaAnteDtmfMientrasPlayback(JsonNode node, String channelId, String digit) {

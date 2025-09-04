@@ -1,7 +1,8 @@
-package coop.bancocredicoop.omnited.service.ivr;
+package coop.bancocredicoop.omnited.service.ivr.diagram;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.messages.CanalMensajeria;
+import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -31,12 +32,12 @@ public class DiagramaProcessor {
     /**
      * Procesa un mensaje entrante para un diagrama dado.
      * @param ivrLimpio     JSON completo del ivr (nodes y edges)
-     * @param from          Identificador del usuario
+     * @param channelId          Identificador del usuario
      * @param textoUsuario  Texto enviado por el usuario
      */
-    public void procesarMensaje(JsonNode ivrLimpio, String from, String textoUsuario) {
-        String posicionKey = "posicion:" + from;
-        String sessionKey = "sessionStarted:" + from;
+    public void procesarMensaje(JsonNode ivrLimpio, String channelId, String textoUsuario) {
+        String posicionKey = "posicion:" + channelId;
+        String sessionKey = "sessionStarted:" + channelId;
 
         // Recuperar posición actual en el flujo
         String nodoActualId = redisService.get(posicionKey);
@@ -44,7 +45,7 @@ public class DiagramaProcessor {
         // Si no hay posición, puede ser inicio o sesión expirada
         if (nodoActualId == null) {
             if (redisService.get(sessionKey) != null) {
-                canalMensajeria.enviarMensaje(from, "Se cerró la sesión. Gracias por comunicarse.");
+                canalMensajeria.enviarMensaje(channelId, "Se cerró la sesión. Gracias por comunicarse.");
                 redisService.delete(sessionKey);
                 return;
             }
@@ -56,7 +57,7 @@ public class DiagramaProcessor {
         // Obtener nodo actual
         JsonNode nodoActual = DiagramaUtils.encontrarNodoPorId(ivrLimpio, nodoActualId);
         if (nodoActual == null) {
-            log.error("[{}] Nodo no encontrado: id={}", from, nodoActualId);
+            log.error("[{}] Nodo no encontrado: id={}", channelId, nodoActualId);
             return;
         }
 
@@ -64,17 +65,20 @@ public class DiagramaProcessor {
         String tipo = nodoActual.get("type").asText();
         NodeHandler handler = handlers.get(tipo);
         if (handler == null) {
-            log.warn("[{}] Handler no registrado para tipo={}", from, tipo);
+            log.warn("[{}] Handler no registrado para tipo={}", channelId, tipo);
             return;
         }
 
+
         // Ejecutar handler y obtener el siguiente nodo
-        String siguienteId = handler.handle(ivrLimpio, nodoActual, from, textoUsuario);
+        String siguienteId = handler.handle(ivrLimpio, nodoActual, channelId, textoUsuario);
 
         // Si el handler devuelve un siguiente nodo, actualizamos Redis y continuamos
         if (siguienteId != null) {
             redisService.set(posicionKey, siguienteId, TTL_SEC);
-            procesarMensaje(ivrLimpio, from, "");
+            procesarMensaje(ivrLimpio, channelId, "");
         }
     }
+
+
 }

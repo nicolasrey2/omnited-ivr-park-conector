@@ -3,12 +3,22 @@ package coop.bancocredicoop.omnited.handler.ivrNodes;
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.messages.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
+import coop.bancocredicoop.omnited.service.redis.RedisService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractSalidaHandler implements NodeHandler {
   private final MessageService messageService;
+  private final RedisService redisService;
+  private static final Pattern VAR_PATTERN = Pattern.compile("\\{(\\w+)\\}");
+  private final Logger log =  LoggerFactory.getLogger(AbstractSalidaHandler.class);
 
-  public AbstractSalidaHandler(MessageService messageService) {
+  public AbstractSalidaHandler(MessageService messageService, RedisService redisService) {
     this.messageService = messageService;
+    this.redisService = redisService;
   }
 
   @Override
@@ -39,6 +49,27 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
     }
 
     return null;
+  }
+
+  public String resolveVars(String textoSinVars, String channelId) {
+    Matcher matcher = VAR_PATTERN.matcher(textoSinVars);
+    StringBuffer sb = new StringBuffer();
+
+    while (matcher.find()) {
+      String varName = matcher.group(1);
+      String value = redisService.get(varName + ":" + channelId);
+
+      // si no está en Redis, dejo el placeholder tal cual
+      if (value == null) {
+        log.error("Variable {} no encontrada en Redis para canal {}", varName, channelId);
+        value = matcher.group(0);
+      }
+      log.info("Se reemplaza la variable: {}; en el texto: {}", varName, textoSinVars);
+      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));
+    }
+
+    matcher.appendTail(sb);
+    return sb.toString();
   }
 
   protected abstract String primerOutput(JsonNode node, String channelId);

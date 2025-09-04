@@ -5,7 +5,7 @@ import java.util.Map;
 
 import coop.bancocredicoop.omnited.config.MessageOut;
 import coop.bancocredicoop.omnited.handler.rabbit.IvrUpdaterHandler;
-import coop.bancocredicoop.omnited.service.ivr.DiagramaStore;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaStore;
 import coop.bancocredicoop.omnited.utils.JsonCleaningService;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
