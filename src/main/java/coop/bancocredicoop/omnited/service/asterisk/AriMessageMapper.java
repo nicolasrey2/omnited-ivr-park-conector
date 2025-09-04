@@ -39,7 +39,7 @@ public class AriMessageMapper {
         break;
 
       default:
-        log.info("Evento ARI no manejado: {}", message.getType());
+        log.warn("Evento ARI no manejado: {}", message.getType());
 
     }
   }

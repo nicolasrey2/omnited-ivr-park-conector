@@ -1,13 +1,10 @@
 package coop.bancocredicoop.omnited.service.redis;
 
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RedisService {
@@ -57,6 +54,37 @@ public class RedisService {
      */
     public void delete(String key) {
         redisTemplate.delete(key);
+    }
+
+    /**
+     * Borra todas las claves que contengan channelId
+     * TODO se debe analizar si su uso es performante o si se debe cambiar por deletes explicitos
+     */
+    public void deleteAllFrom(String channelId) {
+        String pattern = "*" + channelId + "*";
+
+        ScanOptions options = ScanOptions.scanOptions().match(pattern).count(1000).build();
+
+        try (Cursor<byte[]> cursor = redisTemplate.execute(
+                (RedisCallback<Cursor<byte[]>>) connection -> connection.scan(options))) {
+
+            List<String> keysToDelete = new ArrayList<>();
+            while (cursor.hasNext()) {
+                byte[] rawKey = cursor.next();
+                keysToDelete.add(redisTemplate.getStringSerializer().deserialize(rawKey));
+
+                if (keysToDelete.size() >= 100) {
+                    redisTemplate.unlink(keysToDelete);
+                    keysToDelete.clear();
+                }
+            }
+
+            if (!keysToDelete.isEmpty()) {
+                redisTemplate.unlink(keysToDelete);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error borrando claves de Redis", e);
+        }
     }
 
     /**

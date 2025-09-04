@@ -1,11 +1,63 @@
-validar funcionamiento de setear variables en RestClientNode
+******************************************************************************************************
+******************************************************************************************************
+******************************************************************************************************
+
+ver como resolver seteo de variables de json con distintas formas. En RestClientNode
+    posibilidad:
+        {
+            "candidatos": [
+                {
+                    "nombre": "veronica"
+                    "mascotas": []
+                },
+                {
+                    "nombre": "fabian"
+                    "mascotas": []
+                },
+                {
+                    "nombre": "nico"
+                    "mascotas": [
+                        {
+                            "nombre": "kiara"
+                        },
+                        {
+                            "nombre": "india"
+                        }
+                    ]
+                }
+            ]
+        }
+
+ver estandar JsonPath (en java "jayway jsonpath").
+    segun este estandar:
+
+    | JSONPath                           | Qué selecciona                                                                                   |
+    | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+    | $.candidatos[0].nombre             | "veronica"                                                                                       |
+    | $.candidatos[*].nombre             | ["veronica", "fabian", "nico"]                                                                   |
+    | $.candidatos[2].mascotas[*].nombre | ["kiara", "india"]                                                                               |
+    | $..nombre                          | Todos los valores de nombre en cualquier nivel: ["veronica", "fabian", "nico", "kiara", "india"] |
+
+
+
+******************************************************************************************************
+******************************************************************************************************
+******************************************************************************************************
+
+(AL PARECER FUNCIONA BIEN, TERMINAR DE TESTEAR)
 validar que funciona bien la interpolacion de variables en SalidaSimple y SalidaDigitMenu
-validar que SuperoIntentos sigue funcionando
+
+
+******************************************************************************************************
+******************************************************************************************************
+******************************************************************************************************
 
 ver como medir el tiempo en un nodo por evento
 
 
-----------------------------------------------------------------------
+******************************************************************************************************
+******************************************************************************************************
+******************************************************************************************************
 
 1 -> analizar que estadisticas debo generar con respecto al ivr
 2 -> analizar funcionamiento general del parking

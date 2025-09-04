@@ -18,12 +18,11 @@ public class Hangup implements NodeHandler {
   }
 
   @Override
-  public String handle(JsonNode ivrLimpio, JsonNode nodo, String from, String textoUsuario) {
-    // Borrar la posición y todo el hash de la sesión
-    redisService.delete("posicion:" + from);
-    redisService.deleteHash(from);
+  public String handle(JsonNode ivrLimpio, JsonNode nodo, String chaannelId, String textoUsuario) {
+    //TODO analizar si se quiere cambiar esto a 'ChannelHangupRequest' o 'StasisEnd'
+    redisService.deleteAllFrom(chaannelId);
 
-    aricConnector.hangupChannel(from);
+    aricConnector.hangupChannel(chaannelId);
 
     return null;
   }

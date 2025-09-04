@@ -50,7 +50,7 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
   @Override
   protected String onPlaybackFinished(JsonNode ivr, JsonNode node, String channelId) {
     String selectedHandler = redisService.get("channelSelectedHandler:" + channelId);
-    log.error("se recupera {} en evento onPlaybackfinished", selectedHandler);
+    log.info("se recupera {} en evento onPlaybackfinished", selectedHandler);
     if (selectedHandler == null) {
       return null;
     }
