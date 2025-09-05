@@ -1,0 +1,76 @@
+nodos:
+
+.derivación por habilidades -> me va a llegar que tipo de habilidades tiene que buscar (unos ids, que se comparten entre todos los canales); 
+
+
+
+se debe definir desde el ivr que tanto tiempo de espera quiero en un destino de atencion 
+para parkeo
+investigar como hacer waits (ver redis)
+
+si se vence el tiempo -> accion en función del ivr json
+
+
+-----------------------------------------
+
+cada uno de las opciones de ivr pueden tener distintos horarios
+(nodo consulta horarios)
+
+----------------------------------------
+(nodo tiempo espera)
+
+----------------------------------------
+agregar ttl a digit menu
+----------------------------------------
+
+** nodo de cambio de llamada contra un operador -> es simplemente parkear la llamada que esta contra el ivr
+
+los pedidos de conversación para vincular llamadas son:
+	llega rabbit
+	detecta tipo de mensaje
+	nro parkeo (usuario EN el ivr)
+	nro destino
+	generar llamada
+
+
+-----------------------------------------
+todo: acoplar digit menú a superoIntentos
+
+-----------------------------------------
+
+vamos con JSONPath
+
+{
+  "candidatos": [
+    {
+       "nombre": "veronica"
+       "mascotas": []
+    },
+    {
+                    "nombre": "fabian"
+                    "mascotas": []
+                },
+                {
+                    "nombre": "nico"
+                    "mascotas": [
+                        {
+                            "nombre": "kiara"
+                        },
+                        {
+                            "nombre": "india"
+                        }
+                    ]
+                }
+            ]
+        }
+
+segun este estandar:
+
+    | JSONPath                           | Qué selecciona                                                                                   |
+    | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+    | $.candidatos[0].nombre             | "veronica"                                                                                       |
+    | $.candidatos[*].nombre             | ["veronica", "fabian", "nico"]                                                                   |
+    | $.candidatos[2].mascotas[*].nombre | ["kiara", "india"]                                                                               |
+    | $..nombre                          | Todos los valores de nombre en cualquier nivel: ["veronica", "fabian", "nico", "kiara", "india"] |
+
+
