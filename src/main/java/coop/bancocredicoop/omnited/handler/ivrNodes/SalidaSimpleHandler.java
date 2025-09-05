@@ -20,6 +20,11 @@ public class SalidaSimpleHandler extends AbstractSalidaHandler {
     }
 
     @Override
+    protected void preHandleTasks(JsonNode ivr, JsonNode node, String channelId, String textoUsuario) {
+
+    }
+
+    @Override
     protected String primerOutput(JsonNode node, String channelId) {
         String textoSinVars = node.get("data").get("text").asText();
         String texto = resolveVars(textoSinVars, channelId);

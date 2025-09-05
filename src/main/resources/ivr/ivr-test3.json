@@ -23,7 +23,9 @@
         "type": "dtmfInput",
         "data": {
           "cantidadMinima": "6",
-          "variable": "dni"
+          "variable": "dni",
+          "ttlInterDigit": "2",
+          "ttlTotal": "45"
         }
       },
       {
@@ -42,10 +44,10 @@
             200,
             201
           ],
-          "variablesASetear": [
-            "nombre",
-            "apellidoRazonSocial"
-          ]
+          "variablesASetear": {
+            "nombre": "$.candidatos[0].nombre",
+            "apellidoRazonSocial" : "$.candidatos[0].apellidoRazonSocial"
+          }
         }
       },
       {
@@ -74,7 +76,8 @@
         "type": "digitMenu",
         "cantidadReintentos" : "3",
         "data": {
-          "text": "Para Tarjetas en distribución marque 1. Para Denuncias por robo o extravío marque 2. Para Cuotificación marque 3"
+          "text": "Para Tarjetas en distribución marque 1. Para Denuncias por robo o extravío marque 2. Para Cuotificación marque 3",
+          "ttlTotal": "50"
         },
         "optionsList": [
           {

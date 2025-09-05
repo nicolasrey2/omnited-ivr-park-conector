@@ -1,8 +1,10 @@
 package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import coop.bancocredicoop.omnited.exceptions.TimeoutNodeException;
 import coop.bancocredicoop.omnited.messages.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
+import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,12 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
 
   @Override
   public String handle(JsonNode ivr, JsonNode node, String channelId, String textoUsuario) {
+    try {
+      preHandleTasks(ivr, node, channelId, textoUsuario);
+    }
+    catch (TimeoutNodeException e) {
+      return DiagramaUtils.encontrarHangup(ivr);
+    }
 
     if (textoUsuario.isEmpty()) { // primera iteración
       String texto = primerOutput(node, channelId);
@@ -71,6 +79,8 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
     matcher.appendTail(sb);
     return sb.toString();
   }
+
+  protected abstract void preHandleTasks(JsonNode ivr, JsonNode node, String channelId, String textoUsuario);
 
   protected abstract String primerOutput(JsonNode node, String channelId);
 

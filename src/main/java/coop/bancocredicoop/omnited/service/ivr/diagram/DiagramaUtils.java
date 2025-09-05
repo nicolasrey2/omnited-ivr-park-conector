@@ -125,4 +125,22 @@ public final class DiagramaUtils {
         }
         return texto != null && !texto.trim().isEmpty();
     }
+
+    /**
+     * Busca el nodo de tipo "hangup" en el IVR.
+     * Retorna el ID del primer nodo encontrado con type "hangup",
+     * o null si no existe.
+     */
+    public static String encontrarHangup(JsonNode ivrLimpio) {
+        if (ivrLimpio.has("nodes")) {
+            for (JsonNode nodo : ivrLimpio.get("nodes")) {
+                JsonNode typeNode = nodo.get("type");
+                if (typeNode != null && "hangup".equalsIgnoreCase(typeNode.asText())) {
+                    return nodo.get("id").asText();
+                }
+            }
+        }
+        log.warn("No se encontró nodo de tipo 'hangup' en el IVR");
+        return null;
+    }
 }

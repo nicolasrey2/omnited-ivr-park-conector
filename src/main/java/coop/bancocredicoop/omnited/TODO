@@ -1,7 +1,9 @@
-1 -> incorporar standar jsonpath a rest node
-2 -> cambiar rest node a -> rest/soup node
-3 -> acoplar digit menú a superoIntentos y agregar ttl a digit menu
-4 -> comenzar a desarrollar nodos ivr y testear (mucho)
+testear funcionamiento actual, ttls. Arreglar json y mas
+
+
+1 -> cambiar rest node a -> rest/soup node
+3 -> comenzar a desarrollar nodos ivr y testear (mucho)
+
 
 
 ******************************************************************************************************

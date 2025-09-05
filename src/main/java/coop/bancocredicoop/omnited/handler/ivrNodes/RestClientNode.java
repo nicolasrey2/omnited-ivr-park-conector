@@ -8,6 +8,7 @@ import coop.bancocredicoop.omnited.service.redis.RedisService;
 import coop.bancocredicoop.omnited.service.restClient.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.jayway.jsonpath.JsonPath;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import java.util.*;
@@ -17,7 +18,7 @@ import java.util.*;
 public class RestClientNode implements NodeHandler {
   private static final Logger log = LoggerFactory.getLogger(RestClientNode.class);
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final int tts = 20;
+  private final int tts = 35;
 
   private final RedisService redisService;
   private final RestClient restClient;
@@ -60,7 +61,12 @@ public class RestClientNode implements NodeHandler {
       }
 
       handleRetries(channelId);
-      return DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
+      String nodoError = DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
+      if (nodoError == null) {
+        log.error("No se encontro nodo con handler error");
+        nodoError = DiagramaUtils.encontrarHangup(ivr);
+      }
+      return nodoError;
     }
 
     clearRetries(channelId);
@@ -82,33 +88,34 @@ public class RestClientNode implements NodeHandler {
     redisService.delete("cantidadReintentos:" + channelId);
   }
 
-  private void setVars(String channelId, String responseBody, JsonNode variablesASetear) {
-    if (variablesASetear == null || !variablesASetear.isArray()) {
+  private void setVars(String channelId, String responseBody, JsonNode varsNode) {
+    if (varsNode == null || !varsNode.isObject()) {
+      log.info("No hay variables en el nodo de variables");
       return;
     }
 
-    try {
-      JsonNode responseJson = objectMapper.readTree(responseBody);
+    Iterator<Map.Entry<String, JsonNode>> fields = varsNode.fields();
+    while (fields.hasNext()) {
+      Map.Entry<String, JsonNode> entry = fields.next();
 
-      for (JsonNode varNode : variablesASetear) {
-        String variable = varNode.asText();
+      String nombreVariable = entry.getKey();              // ej: "nombre"
+      String jsonPath = entry.getValue().asText();         // ej: "$.candidatos[0].nombre"
 
-        // buscamos el valor en el JSON de respuesta
-        JsonNode valorNode = responseJson.get(variable);
-        if (valorNode != null && !valorNode.isNull()) {
-          String valor = valorNode.asText();
+      try {
+        // resolver el JSONPath sobre la respuesta del servicio
+        Object valor = JsonPath.read(responseBody, jsonPath);
 
-          // lo guardamos en Redis con la key var:channelId
-          redisService.set(variable + ":" + channelId, valor, tts);
-          log.info("Seteada variable {}={} para canal {}", variable, valor, channelId);
+        if (valor != null) {
+          redisService.set(nombreVariable + ":" + channelId, valor.toString(), tts);
+          log.info("Se seteó la variable: {}, con el valor: {}", nombreVariable, valor);
         } else {
-          log.error("Variable {} no encontrada en la respuesta del endpoint", variable);
+          log.error("No se encontró valor para la variable {} con JSONPath {}", nombreVariable, jsonPath);
         }
-      }
-    } catch (Exception e) {
-      log.error("Error procesando responseBody en setVars: {}", e.getMessage(), e);
-    }
 
+      } catch (Exception e) {
+        log.error("Error resolviendo JSONPath {} para la variable {}", jsonPath, nombreVariable, e);
+      }
+    }
   }
 
   private Map<String, String> getValues(JsonNode data, String channelId) {
