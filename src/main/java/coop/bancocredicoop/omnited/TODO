@@ -1,17 +1,16 @@
-testear funcionamiento actual, ttls. Arreglar json y mas
 
+mejorar logica esparcida por todos lados.
+    .logica de timers
+
+
+
+** ver es cómo resolver los
+** placeholders {nombre}, {apellidoRazonSocial}, {dni} en queryParams y body.
 
 1 -> cambiar rest node a -> rest/soup node
-3 -> comenzar a desarrollar nodos ivr y testear (mucho)
 
+2 -> comenzar a desarrollar json de nodos ivr y testear (mucho)
 
-
-******************************************************************************************************
-******************************************************************************************************
-******************************************************************************************************
-
-validar que funciona bien la interpolacion de variables en SalidaSimple y SalidaDigitMenu
-(AL PARECER FUNCIONA BIEN, TERMINAR DE TESTEAR)
 
 
 ******************************************************************************************************

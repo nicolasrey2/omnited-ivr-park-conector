@@ -1,7 +1,6 @@
 package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
@@ -14,11 +13,11 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 
-@Component("restClientNode")
+@Component("servCliente")
 public class RestClientNode implements NodeHandler {
   private static final Logger log = LoggerFactory.getLogger(RestClientNode.class);
-  private final ObjectMapper objectMapper = new ObjectMapper();
-  private final int tts = 35;
+  private final int TTS_REINTENTOS = 35;
+  private final int TTS_VARIABLES = 300;
 
   private final RedisService redisService;
   private final RestClient restClient;
@@ -40,24 +39,21 @@ public class RestClientNode implements NodeHandler {
     String method = data.has("method") ? data.get("method").asText() : null;
     JsonNode queryParams = data.get("queryParams");
     JsonNode body = data.get("body");
-    Map<String, String> values = getValues(data, channelId);
+    Map<String, String> pathParams = getPathParams(data, channelId);
     Map<String, String> headersMap = getHeaders(data);
     List<Integer> correctStatues = getCorrectStates(data);
 
     // Llamar RestClient
-    ResponseEntity<String> response = restClient.handle(url, method, queryParams, headersMap, values, body);
+    ResponseEntity<String> response = restClient.handle(url, method, queryParams, headersMap, pathParams, body);
     log.info("Respuesta del endpoint {}: {}", url, response.getBody());
 
     if (! correctStatues.contains(response.getStatusCodeValue())) { // error
       log.info("Error al consultar el endpoint {}: cod: {}; body: {}", url,
           response.getStatusCodeValue(), response.getBody());
 
-      //TODO analizar: Si es error funcional (ej: 400 o 404) -> borro variables de redis
-      if (response.getStatusCodeValue() == 400 || response.getStatusCodeValue() == 404) {
-        for (String variable : values.keySet()) {
-          redisService.delete(variable + ":" + channelId);
-          log.info("Borrada variable {} de Redis para canal {}", variable, channelId);
-        }
+      for (String variable : pathParams.keySet()) {
+        redisService.delete(variable + ":" + channelId);
+        log.info("Borrada variable {} de Redis para canal {}", variable, channelId);
       }
 
       handleRetries(channelId);
@@ -81,7 +77,7 @@ public class RestClientNode implements NodeHandler {
     }
     int cantActual = Integer.parseInt(cantActualStr);
 
-    redisService.set("cantidadReintentos:" + channelId, String.valueOf(cantActual+1), tts);
+    redisService.set("cantidadReintentos:" + channelId, String.valueOf(cantActual+1), TTS_REINTENTOS);
   }
 
   private void clearRetries(String channelId) {
@@ -106,7 +102,7 @@ public class RestClientNode implements NodeHandler {
         Object valor = JsonPath.read(responseBody, jsonPath);
 
         if (valor != null) {
-          redisService.set(nombreVariable + ":" + channelId, valor.toString(), tts);
+          redisService.set(nombreVariable + ":" + channelId, valor.toString(), TTS_VARIABLES);
           log.info("Se seteó la variable: {}, con el valor: {}", nombreVariable, valor);
         } else {
           log.error("No se encontró valor para la variable {} con JSONPath {}", nombreVariable, jsonPath);
@@ -118,8 +114,8 @@ public class RestClientNode implements NodeHandler {
     }
   }
 
-  private Map<String, String> getValues(JsonNode data, String channelId) {
-    JsonNode pathValuesNode = data.get("PathValues");
+  private Map<String, String> getPathParams(JsonNode data, String channelId) {
+    JsonNode pathValuesNode = data.get("pathParams");
     Map<String, String> values = new HashMap<>();
 
     if (pathValuesNode != null && pathValuesNode.isArray()) {

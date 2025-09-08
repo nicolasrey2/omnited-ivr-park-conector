@@ -10,11 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.*;
 
-@Component("digitMenu")
+@Component("opcionMenu")
 public class SalidaDigitMenu extends AbstractSalidaHandler {
   private static final Logger log = LoggerFactory.getLogger(SalidaDigitMenu.class);
   private final RedisService redisService;
@@ -42,7 +42,8 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
 
   @Override
   protected String primerOutput(JsonNode nodo, String channelId) {
-    String texto = nodo.get("data").get("text").asText();
+    String textoSinVars = nodo.get("data").get("text").asText();
+    String texto = resolveVars(textoSinVars, channelId);
     log.info("Texto: {}", texto);
     return texto;
   }
@@ -56,6 +57,7 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
 
   @Override
   protected String logicaAnteDtmfDespuesDePlayback(JsonNode ivr, JsonNode node, String channelId, String digit) {
+    removeTimerTotal(channelId);
     String selectedHandler = findFetchHandler(node, digit, channelId);
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, selectedHandler);
   }
@@ -64,11 +66,18 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
   @Override
   protected String onPlaybackFinished(JsonNode ivr, JsonNode node, String channelId) {
     String selectedHandler = redisService.get("channelSelectedHandler:" + channelId);
-    log.info("se recupera {} en evento onPlaybackfinished", selectedHandler);
+    redisService.delete("channelSelectedHandler:" + channelId);
+    log.info("se recupera y borra de la cache el handler: {} en evento onPlaybackfinished", selectedHandler);
     if (selectedHandler == null) {
       return null;
     }
+    removeTimerTotal(channelId);
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, selectedHandler);
+  }
+
+  private void removeTimerTotal(String channelId) {
+    Optional.ofNullable(totalTimers.remove(channelId))
+        .ifPresent(f -> f.cancel(false));
   }
 
   private void setTimerTotal(int ttlTotal, JsonNode ivrLimpio, String channelId) {
@@ -76,7 +85,7 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
     if (previousTotal != null) previousTotal.cancel(false);
 
     ScheduledFuture<?> futureTotal = scheduler.schedule(() -> {
-      log.info("Se acabo el tiempo total en DtmfInput para: {}", channelId);
+      log.info("Se acabo el tiempo total en salidaDigitMenu para: {}", channelId);
       diagramaProcessor.procesarMensaje(ivrLimpio, channelId, "timeOut");
       totalTimers.remove(channelId);
     }, ttlTotal, TimeUnit.SECONDS);
@@ -111,9 +120,10 @@ public class SalidaDigitMenu extends AbstractSalidaHandler {
     if (cantActualStr == null) {
       cantActualStr = "0";
     }
-    int cantActual = Integer.parseInt(cantActualStr);
+    int cantActual = Integer.parseInt(cantActualStr) + 1 ;
 
-    redisService.set("cantidadReintentos:" + channelId, String.valueOf(cantActual+1), TTS_RETRIES);
+    redisService.set("cantidadReintentos:" + channelId, String.valueOf(cantActual), TTS_RETRIES);
+    log.info("Se seteo cantidadReintentos:{} en {}", channelId, cantActual);
   }
 
   private void clearRetries(String channelId) {

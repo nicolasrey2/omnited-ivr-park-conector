@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 @Component("dtmfInput")
@@ -54,17 +55,18 @@ public class DtmfInput implements NodeHandler {
     redisService.set(redisKey, acumulado,  TTL_VAR_SEC);
 
     // cancelamos el timer anterior si existía
-    ScheduledFuture<?> previous = interDigitTimers.get(channelId);
-    if (previous != null) previous.cancel(false);
+    Optional.ofNullable(interDigitTimers.remove(channelId))
+        .ifPresent(f -> f.cancel(false));
+
     // programamos un nuevo timeout de 2 seg
     ScheduledFuture<?> future = scheduler.schedule(() -> {
       String finalAcumulado = redisService.getOrDefault(redisKey, "");
       if (finalAcumulado.length() >= cantidadMinEsperada) {
         // avanzamos con el flujo
         log.info("Se avanza el flujo con el acumulado {} para la key {}", finalAcumulado, redisKey);
+        cancelAllTimers(channelId);
+        log.info("Se limpian los timers");
         diagramaProcessor.procesarMensaje(ivrLimpio, channelId, "finalizo");
-        totalTimers.remove(channelId);
-        interDigitTimers.remove(channelId);
       } else {
         log.error("No se pudo procesar la cantidad de datos correcta");
       }
@@ -75,19 +77,27 @@ public class DtmfInput implements NodeHandler {
   }
 
   private void setTimerTotal(int ttlTotal, JsonNode ivrLimpio, String channelId) {
-    ScheduledFuture<?> previousTotal = totalTimers.get(channelId);
-    if (previousTotal != null) previousTotal.cancel(false);
+    Optional.ofNullable(totalTimers.remove(channelId))
+        .ifPresent(f -> f.cancel(false));
 
     ScheduledFuture<?> futureTotal = scheduler.schedule(() -> {
       log.info("Se acabo el tiempo total en DtmfInput para: {}", channelId);
+      cancelAllTimers(channelId);
+      log.info("Se limpian los timers");
       diagramaProcessor.procesarMensaje(ivrLimpio, channelId, "timeOut");
-      totalTimers.remove(channelId);
-      interDigitTimers.remove(channelId);
     }, ttlTotal, TimeUnit.SECONDS);
 
     log.info("Se setea timer total para: {}, con valor: {}", channelId, ttlTotal);
 
     totalTimers.put(channelId, futureTotal);
+  }
+
+  private void cancelAllTimers(String channelId) {
+    Optional.ofNullable(interDigitTimers.remove(channelId))
+        .ifPresent(f -> f.cancel(false));
+    Optional.ofNullable(totalTimers.remove(channelId))
+        .ifPresent(f -> f.cancel(false));
+    log.info("Timers cancelados para canal {}", channelId);
   }
 
   private void recoverAccumulatedDuringSimpleExitIfExists(String channelId, String redisKey) {

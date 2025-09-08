@@ -29,6 +29,13 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
       preHandleTasks(ivr, node, channelId, textoUsuario);
     }
     catch (TimeoutNodeException e) {
+      /*
+      String nodeErrorHandler = DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
+      if (nodeErrorHandler != null) {
+        return  nodeErrorHandler;
+      }
+      */
+
       return DiagramaUtils.encontrarHangup(ivr);
     }
 

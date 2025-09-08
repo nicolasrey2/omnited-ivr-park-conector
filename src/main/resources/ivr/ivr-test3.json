@@ -30,11 +30,11 @@
       },
       {
         "id": "4",
-        "type": "restClientNode",
+        "type": "servCliente",
         "data": {
           "url": "http://sesb2303ax/listacandidatos-creditos-txt/rest/api/v1/listacandidatos/F/nrodoc/{dni}",
           "method": "GET",
-          "PathValues": [
+          "pathParams": [
             "dni"
           ],
           "headers": {
@@ -73,10 +73,10 @@
       },
       {
         "id": "6",
-        "type": "digitMenu",
-        "cantidadReintentos" : "3",
+        "type": "opcionMenu",
+        "ttlTotal" : "45",
         "data": {
-          "text": "Para Tarjetas en distribución marque 1. Para Denuncias por robo o extravío marque 2. Para Cuotificación marque 3",
+          "text": "para el dni {dni}. Las opciones son Para distribución marque 1. Para Denuncias por robo o extravío marque 2. Para Cuotificación marque 3",
           "ttlTotal": "50"
         },
         "optionsList": [
@@ -93,6 +93,13 @@
             "text": "Cuotificación"
           }
         ]
+      },
+      {
+        "id": "200",
+        "type": "superoIntentos",
+        "data": {
+          "cantidadReintentos": "3"
+        }
       },
       {
         "id": "7",
@@ -132,6 +139,13 @@
         "data": {
           "text": "dni incorrecto, vuelva a ingresarlo"
         }
+      },
+      {
+        "id": "109",
+        "type": "salidaSimple",
+        "data": {
+          "text": "digito incorrecto, vuelva a ingresarlo"
+        }
       }
     ],
     "edges": [
@@ -158,6 +172,33 @@
         "source": "5",
         "target": "6",
         "id": "xy-edge__5-6"
+      },
+      {
+        "type": "smoothstep",
+        "source": "6",
+        "sourceHandle": "error",
+        "target": "200",
+        "id": "xy-edge__6-200"
+      },
+      {
+        "type": "smoothstep",
+        "source": "200",
+        "sourceHandle": "siSupero",
+        "target": "102",
+        "id": "xy-edge__200-siSupero-102"
+      },
+      {
+        "type": "smoothstep",
+        "source": "200",
+        "sourceHandle": "noSupero",
+        "target": "109",
+        "id": "xy-edge__200-noSupero-109"
+      },
+      {
+        "type": "smoothstep",
+        "source": "109",
+        "target": "6",
+        "id": "xy-edge__109-noSupero-6"
       },
       {
         "type": "smoothstep",
