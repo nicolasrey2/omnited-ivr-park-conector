@@ -11,6 +11,8 @@ import com.jayway.jsonpath.JsonPath;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Component("servCliente")
@@ -21,6 +23,9 @@ public class RestClientNode implements NodeHandler {
 
   private final RedisService redisService;
   private final RestClient restClient;
+
+  private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^}]+)}");
+
 
   public RestClientNode(RedisService redisService, RestClient restClient) {
     this.redisService = redisService;
@@ -35,11 +40,14 @@ public class RestClientNode implements NodeHandler {
       return "";
     }
 
-    String url = data.has("url") ? data.get("url").asText() : null;
     String method = data.has("method") ? data.get("method").asText() : null;
-    JsonNode queryParams = data.get("queryParams");
-    JsonNode body = data.get("body");
+
+    String url = data.has("url") ? data.get("url").asText() : null;
     Map<String, String> pathParams = getPathParams(data, channelId);
+
+    Map<String, String> queryParams = getQueryParams(data, channelId);
+    Map<String, String> body        = getBodyParams(data, channelId);
+
     Map<String, String> headersMap = getHeaders(data);
     List<Integer> correctStatues = getCorrectStates(data);
 
@@ -68,6 +76,63 @@ public class RestClientNode implements NodeHandler {
     clearRetries(channelId);
     setVars(channelId, response.getBody(), data.get("variablesASetear"));
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, "ok");
+  }
+
+  /**
+   * Reemplaza placeholders {var} por su valor en Redis (si existe).
+   */
+  private String replaceVarsFromRedis(String rawValue, String channelId) {
+    if (rawValue == null) return null;
+
+    Matcher matcher = VAR_PATTERN.matcher(rawValue);
+    StringBuffer sb = new StringBuffer();
+
+    while (matcher.find()) {
+      String varName = matcher.group(1);
+      String value = redisService.get(varName + ":" + channelId);
+
+      if (value == null) {
+        log.error("Redis no tiene valor para la variable '{}' en el canal {}. Manteniendo placeholder '{}'",
+            varName, channelId, matcher.group(0));
+        value = matcher.group(0); // deja el placeholder
+      } else {
+        log.info("Se reemplaza la variable '{}' por '{}' en el valor: '{}'", varName, value, rawValue);
+      }
+
+      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));
+    }
+    matcher.appendTail(sb);
+    return sb.toString();
+  }
+
+  /**
+   * Convierte un JsonNode (objeto) en Map<String, String>, reemplazando las variables {var}.
+   */
+  private Map<String, String> getJsonNodeAsMapWithRedisVars(JsonNode node, String channelId) {
+    Map<String, String> result = new HashMap<>();
+    if (node != null && node.isObject()) {
+      node.fields().forEachRemaining(entry -> {
+        String key = entry.getKey();
+        String rawValue = entry.getValue().asText();
+        String resolvedValue = replaceVarsFromRedis(rawValue, channelId);
+        result.put(key, resolvedValue);
+      });
+    }
+    return result;
+  }
+
+  /**
+   * Método para obtener queryParams resuelto.
+   */
+  private Map<String, String> getQueryParams(JsonNode data, String channelId) {
+    return getJsonNodeAsMapWithRedisVars(data.get("queryParams"), channelId);
+  }
+
+  /**
+   * Método para obtener body resuelto.
+   */
+  private Map<String, String> getBodyParams(JsonNode data, String channelId) {
+    return getJsonNodeAsMapWithRedisVars(data.get("body"), channelId);
   }
 
   private void handleRetries(String channelId) {

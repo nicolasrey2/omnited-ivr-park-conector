@@ -4,14 +4,13 @@ mejorar logica esparcida por todos lados.
 
 
 
-** ver es cómo resolver los
-** placeholders {nombre}, {apellidoRazonSocial}, {dni} en queryParams y body.
 
 1 -> cambiar rest node a -> rest/soup node
 
 2 -> comenzar a desarrollar json de nodos ivr y testear (mucho)
 
 
+testear placeholders {nombre}, {apellidoRazonSocial}, {dni} en queryParams y body.
 
 ******************************************************************************************************
 ******************************************************************************************************
