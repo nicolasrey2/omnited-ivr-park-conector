@@ -5,22 +5,20 @@ import coop.bancocredicoop.omnited.exceptions.TimeoutNodeException;
 import coop.bancocredicoop.omnited.messages.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
-import coop.bancocredicoop.omnited.service.redis.RedisService;
+import coop.bancocredicoop.omnited.service.redis.VariableResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public abstract class AbstractSalidaHandler implements NodeHandler {
+public abstract class AbstractSalidaNode implements NodeHandler {
+  private final Logger log =  LoggerFactory.getLogger(AbstractSalidaNode.class);
+
   private final MessageService messageService;
-  private final RedisService redisService;
-  private static final Pattern VAR_PATTERN = Pattern.compile("\\{(\\w+)\\}");
-  private final Logger log =  LoggerFactory.getLogger(AbstractSalidaHandler.class);
+  protected final VariableResolver variableResolver;
 
-  public AbstractSalidaHandler(MessageService messageService, RedisService redisService) {
+  public AbstractSalidaNode(MessageService messageService, VariableResolver variableResolver) {
     this.messageService = messageService;
-    this.redisService = redisService;
+    this.variableResolver  = variableResolver;
   }
 
   @Override
@@ -64,27 +62,6 @@ public abstract class AbstractSalidaHandler implements NodeHandler {
     }
 
     return null;
-  }
-
-  public String resolveVars(String textoSinVars, String channelId) {
-    Matcher matcher = VAR_PATTERN.matcher(textoSinVars);
-    StringBuffer sb = new StringBuffer();
-
-    while (matcher.find()) {
-      String varName = matcher.group(1);
-      String value = redisService.get(varName + ":" + channelId);
-
-      // si no está en Redis, dejo el placeholder tal cual
-      if (value == null) {
-        log.error("Variable {} no encontrada en Redis para canal {}", varName, channelId);
-        value = matcher.group(0);
-      }
-      log.info("Se reemplaza la variable: {}; en el texto: {}", varName, textoSinVars);
-      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));
-    }
-
-    matcher.appendTail(sb);
-    return sb.toString();
   }
 
   protected abstract void preHandleTasks(JsonNode ivr, JsonNode node, String channelId, String textoUsuario);

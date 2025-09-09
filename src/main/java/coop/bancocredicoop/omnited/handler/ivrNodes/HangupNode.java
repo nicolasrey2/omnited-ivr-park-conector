@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 
 @Component("hangup")
-public class Hangup implements NodeHandler {
+public class HangupNode implements NodeHandler {
   private final RedisService redisService;
   private final AriConnector aricConnector;
 
-  public Hangup(RedisService redisService, AriConnector aricConnector) {
+  public HangupNode(RedisService redisService, AriConnector aricConnector) {
     this.redisService = redisService;
     this.aricConnector = aricConnector;
   }

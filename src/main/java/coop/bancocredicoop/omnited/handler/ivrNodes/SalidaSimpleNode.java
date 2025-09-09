@@ -4,18 +4,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.messages.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
+import coop.bancocredicoop.omnited.service.redis.VariableResolver;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 @Component("salidaSimple")
-public class SalidaSimpleHandler extends AbstractSalidaHandler {
-    private final Logger log = LoggerFactory.getLogger(SalidaSimpleHandler.class);
+public class SalidaSimpleNode extends AbstractSalidaNode {
+    private final Logger log = LoggerFactory.getLogger(SalidaSimpleNode.class);
     private final RedisService redisService;
 
-    public SalidaSimpleHandler(MessageService messageService, RedisService redisService) {
-      super(messageService, redisService);
+    public SalidaSimpleNode(MessageService messageService, RedisService redisService,
+                            VariableResolver variableResolver) {
+      super(messageService, variableResolver);
       this.redisService = redisService;
     }
 
@@ -27,7 +29,7 @@ public class SalidaSimpleHandler extends AbstractSalidaHandler {
     @Override
     protected String primerOutput(JsonNode node, String channelId) {
         String textoSinVars = node.get("data").get("text").asText();
-        String texto = resolveVars(textoSinVars, channelId);
+        String texto = variableResolver.resolve(textoSinVars, channelId);
         log.info("Texto: {}", texto);
         return texto;
     }

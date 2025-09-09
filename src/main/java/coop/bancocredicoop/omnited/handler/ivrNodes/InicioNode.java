@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  * inmediatamente al siguiente nodo.
  */
 @Component("inicio")
-public class InicioNodeHandler implements NodeHandler {
-  private static final Logger log = LoggerFactory.getLogger(InicioNodeHandler.class);
+public class InicioNode implements NodeHandler {
+  private static final Logger log = LoggerFactory.getLogger(InicioNode.class);
   /**
    * Imprime un log de inicio y devuelve el ID del siguiente nodo,
    * que será procesado por DiagramaMapper.

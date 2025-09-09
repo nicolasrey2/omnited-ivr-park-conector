@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
+import coop.bancocredicoop.omnited.service.redis.RetryService;
+import coop.bancocredicoop.omnited.service.redis.VariableResolver;
 import coop.bancocredicoop.omnited.service.restClient.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,25 +13,25 @@ import com.jayway.jsonpath.JsonPath;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Component("servCliente")
-public class RestClientNode implements NodeHandler {
-  private static final Logger log = LoggerFactory.getLogger(RestClientNode.class);
+public class ServiceClientNode implements NodeHandler {
+  private static final Logger log = LoggerFactory.getLogger(ServiceClientNode.class);
   private final int TTS_REINTENTOS = 35;
   private final int TTS_VARIABLES = 300;
 
   private final RedisService redisService;
   private final RestClient restClient;
+  private final VariableResolver variableResolver;
+  private final RetryService retryService;
 
-  private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^}]+)}");
-
-
-  public RestClientNode(RedisService redisService, RestClient restClient) {
+  public ServiceClientNode(RedisService redisService, RestClient restClient,
+                           VariableResolver variableResolver,  RetryService retryService) {
     this.redisService = redisService;
     this.restClient = restClient;
+    this.variableResolver = variableResolver;
+    this.retryService = retryService;
   }
 
   @Override
@@ -52,7 +54,7 @@ public class RestClientNode implements NodeHandler {
     List<Integer> correctStatues = getCorrectStates(data);
 
     // Llamar RestClient
-    ResponseEntity<String> response = restClient.handle(url, method, queryParams, headersMap, pathParams, body);
+    ResponseEntity<String> response = restClient.send(url, method, queryParams, headersMap, pathParams, body);
     log.info("Respuesta del endpoint {}: {}", url, response.getBody());
 
     if (! correctStatues.contains(response.getStatusCodeValue())) { // error
@@ -64,7 +66,7 @@ public class RestClientNode implements NodeHandler {
         log.info("Borrada variable {} de Redis para canal {}", variable, channelId);
       }
 
-      handleRetries(channelId);
+      retryService.handleRetries(channelId, TTS_REINTENTOS);
       String nodoError = DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
       if (nodoError == null) {
         log.error("No se encontro nodo con handler error");
@@ -73,37 +75,11 @@ public class RestClientNode implements NodeHandler {
       return nodoError;
     }
 
-    clearRetries(channelId);
+    retryService.clearRetries(channelId);
     setVars(channelId, response.getBody(), data.get("variablesASetear"));
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, "ok");
   }
 
-  /**
-   * Reemplaza placeholders {var} por su valor en Redis (si existe).
-   */
-  private String replaceVarsFromRedis(String rawValue, String channelId) {
-    if (rawValue == null) return null;
-
-    Matcher matcher = VAR_PATTERN.matcher(rawValue);
-    StringBuffer sb = new StringBuffer();
-
-    while (matcher.find()) {
-      String varName = matcher.group(1);
-      String value = redisService.get(varName + ":" + channelId);
-
-      if (value == null) {
-        log.error("Redis no tiene valor para la variable '{}' en el canal {}. Manteniendo placeholder '{}'",
-            varName, channelId, matcher.group(0));
-        value = matcher.group(0); // deja el placeholder
-      } else {
-        log.info("Se reemplaza la variable '{}' por '{}' en el valor: '{}'", varName, value, rawValue);
-      }
-
-      matcher.appendReplacement(sb, Matcher.quoteReplacement(value));
-    }
-    matcher.appendTail(sb);
-    return sb.toString();
-  }
 
   /**
    * Convierte un JsonNode (objeto) en Map<String, String>, reemplazando las variables {var}.
@@ -114,7 +90,7 @@ public class RestClientNode implements NodeHandler {
       node.fields().forEachRemaining(entry -> {
         String key = entry.getKey();
         String rawValue = entry.getValue().asText();
-        String resolvedValue = replaceVarsFromRedis(rawValue, channelId);
+        String resolvedValue = variableResolver.resolve(rawValue, channelId);
         result.put(key, resolvedValue);
       });
     }
@@ -135,19 +111,6 @@ public class RestClientNode implements NodeHandler {
     return getJsonNodeAsMapWithRedisVars(data.get("body"), channelId);
   }
 
-  private void handleRetries(String channelId) {
-    String cantActualStr = redisService.get("cantidadReintentos:" + channelId);
-    if (cantActualStr == null) {
-      cantActualStr = "0";
-    }
-    int cantActual = Integer.parseInt(cantActualStr);
-
-    redisService.set("cantidadReintentos:" + channelId, String.valueOf(cantActual+1), TTS_REINTENTOS);
-  }
-
-  private void clearRetries(String channelId) {
-    redisService.delete("cantidadReintentos:" + channelId);
-  }
 
   private void setVars(String channelId, String responseBody, JsonNode varsNode) {
     if (varsNode == null || !varsNode.isObject()) {

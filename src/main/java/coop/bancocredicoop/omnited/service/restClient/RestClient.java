@@ -21,11 +21,11 @@ public class RestClient {
     this.restTemplate.setErrorHandler(new NoThrowErrorHandler());
   }
 
-  public ResponseEntity<String> handle(String url, String method,
-                                       Map<String, String> queryParams,
-                                       Map<String, String> headersMap,
-                                       Map<String, String> pathValues,
-                                       Map<String, String> bodyParams) {
+  public ResponseEntity<String> send(String url, String method,
+                                     Map<String, String> queryParams,
+                                     Map<String, String> headersMap,
+                                     Map<String, String> pathValues,
+                                     Map<String, String> bodyParams) {
 
     if (url == null || url.isEmpty()) {
       throw new IllegalArgumentException("URL no puede ser null o vacío");
