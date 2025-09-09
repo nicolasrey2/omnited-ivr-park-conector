@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.exceptions.TimeoutNodeException;
 import coop.bancocredicoop.omnited.messages.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
-import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import coop.bancocredicoop.omnited.service.redis.VariableResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,15 +25,9 @@ public abstract class AbstractSalidaNode implements NodeHandler {
     try {
       preHandleTasks(ivr, node, channelId, textoUsuario);
     }
-    catch (TimeoutNodeException e) {
-      /*
-      String nodeErrorHandler = DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
-      if (nodeErrorHandler != null) {
-        return  nodeErrorHandler;
-      }
-      */
-
-      return DiagramaUtils.encontrarHangup(ivr);
+    catch (TimeoutNodeException timeoutNodeException) {
+      log.info(timeoutNodeException.getMessage());
+      return timeoutNodeException.getTargetNode();
     }
 
     if (textoUsuario.isEmpty()) { // primera iteración

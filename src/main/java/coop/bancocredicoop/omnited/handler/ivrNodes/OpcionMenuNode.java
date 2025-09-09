@@ -26,7 +26,7 @@ public class OpcionMenuNode extends AbstractSalidaNode {
   private final RedisService redisService;
   private final RetryService retryService;
   private final DiagramaProcessor diagramaProcessor;
-  private final int TTS_RETRIES = 80;
+  private final int TTL_RETRIES = 80;
 
 
   public OpcionMenuNode(MessageService messageService, RedisService redisService,
@@ -42,8 +42,12 @@ public class OpcionMenuNode extends AbstractSalidaNode {
   @Override
   protected void preHandleTasks(JsonNode ivr, JsonNode node, String channelId, String textoUsuario) {
     if("timeOut".equalsIgnoreCase(textoUsuario)) {
-      throw new TimeoutNodeException("Se acabo el tiempo del nodo salidaDigitMenu");
+      throw new TimeoutNodeException(
+          "Se acabo el tiempo del nodo salidaDigitMenu",
+          DiagramaUtils.encontrarHangup(ivr));
     }
+
+    //TODO ver de cambiar esto al playback finished
     int ttlTotal = node.get("data").get("ttlTotal").asInt();
 
     timerService.setTimer(channelId + ":total", Duration.ofSeconds(ttlTotal), () -> {
@@ -107,7 +111,7 @@ public class OpcionMenuNode extends AbstractSalidaNode {
     }
 
     log.info("no se encontró opción para input = {}, retornando 'error' como handler", textoUsuario);
-    retryService.handleRetries(channelId, TTS_RETRIES);
+    retryService.handleRetries(channelId, TTL_RETRIES);
     return "error";
   }
 
