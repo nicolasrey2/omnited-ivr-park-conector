@@ -10,13 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-@Component("salidaSimple")
-public class SalidaSimpleNode extends AbstractSalidaNode {
-    private final Logger log = LoggerFactory.getLogger(SalidaSimpleNode.class);
+@Component("respuestaCompuesta")
+public class RespuestaCompuestaNode extends AbstractSalidaNode {
+    private final Logger log = LoggerFactory.getLogger(RespuestaCompuestaNode.class);
     private final RedisService redisService;
 
-    public SalidaSimpleNode(MessageService messageService, RedisService redisService,
-                            VariableResolver variableResolver) {
+    public RespuestaCompuestaNode(MessageService messageService, RedisService redisService,
+                                  VariableResolver variableResolver) {
       super(messageService, variableResolver);
       this.redisService = redisService;
     }

@@ -22,7 +22,8 @@ public class DtmfInputNode implements NodeHandler {
   private final DiagramaProcessor diagramaProcessor;
   private static final long TTL_VAR_SEC = 300; // 5 mins
 
-  public DtmfInputNode(RedisService redisService, @Lazy DiagramaProcessor diagramaProcessor, IvrTimerService ivrTimerService) {
+  public DtmfInputNode(RedisService redisService, @Lazy DiagramaProcessor diagramaProcessor,
+                       IvrTimerService ivrTimerService) {
     this.redisService = redisService;
     this.diagramaProcessor = diagramaProcessor;
     this.timerService = ivrTimerService;

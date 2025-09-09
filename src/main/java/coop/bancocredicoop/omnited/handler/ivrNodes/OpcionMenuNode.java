@@ -17,11 +17,10 @@ import java.time.Duration;
 
 
 @Component("opcionMenu")
-public class OptionsMenuNode extends AbstractSalidaNode {
-  private static final Logger log = LoggerFactory.getLogger(OptionsMenuNode.class);
+public class OpcionMenuNode extends AbstractSalidaNode {
+  private static final Logger log = LoggerFactory.getLogger(OpcionMenuNode.class);
 
   private static final String CHANNEL_SELECTED_HANDLER = "channelSelectedHandler:";
-
 
   private final IvrTimerService timerService;
   private final RedisService redisService;
@@ -30,9 +29,9 @@ public class OptionsMenuNode extends AbstractSalidaNode {
   private final int TTS_RETRIES = 80;
 
 
-  public OptionsMenuNode(MessageService messageService, RedisService redisService,
-                         @Lazy DiagramaProcessor diagramaProcessor, VariableResolver variableResolver,
-                         RetryService retryService, IvrTimerService ivrTimerService) {
+  public OpcionMenuNode(MessageService messageService, RedisService redisService,
+                        @Lazy DiagramaProcessor diagramaProcessor, VariableResolver variableResolver,
+                        RetryService retryService, IvrTimerService ivrTimerService) {
     super(messageService, variableResolver);
     this.redisService = redisService;
     this.diagramaProcessor = diagramaProcessor;
