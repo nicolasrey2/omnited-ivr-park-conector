@@ -1,13 +1,8 @@
+0 -> testear si no se rompio nada al hacer el refactor
 
-mejorar logica esparcida por todos lados.
-    .logica de timers
+1 -> desarrollar nodos del trello (nodo espera y nodo consultaHorarios)
 
-
-
-
-1 -> cambiar rest node a -> rest/soup node
-
-2 -> desarrollar nodos del trello
+2 -> cambiar rest node a -> rest/soup node
 
 3 -> comenzar a desarrollar json de nodos ivr y testear (mucho)
 

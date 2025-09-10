@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 @Component("ingresoSimple")
-public class IngresoSimple extends AbstractSalidaNode {
-  private static final Logger log = LoggerFactory.getLogger(IngresoSimple.class);
+public class IngresoSimpleNode extends AbstractSalidaNode {
+  private static final Logger log = LoggerFactory.getLogger(IngresoSimpleNode.class);
 
   private final RedisService redisService;
   private final IvrTimerService timerService;
@@ -25,9 +25,9 @@ public class IngresoSimple extends AbstractSalidaNode {
 
   private static final int TTL_VAR_SEC = 300; // 5 mins
 
-  public IngresoSimple(MessageService messageService, VariableResolver variableResolver,
-                       RedisService redisService, IvrTimerService timerService,
-                       @Lazy DiagramaProcessor diagramaProcessor) {
+  public IngresoSimpleNode(MessageService messageService, VariableResolver variableResolver,
+                           RedisService redisService, IvrTimerService timerService,
+                           @Lazy DiagramaProcessor diagramaProcessor) {
     super(messageService, variableResolver);
     this.redisService = redisService;
     this.timerService = timerService;
@@ -39,13 +39,13 @@ public class IngresoSimple extends AbstractSalidaNode {
     if("noDigit".equalsIgnoreCase(textoUsuario)) {
       log.error("No se ingreso digito");
       throw new TimeoutNodeException(
-          "Se acabo el tiempo del nodo IngresoSimple para el canal: " + channelId,
+          "Se acabo el tiempo del nodo IngresoSimpleNode para el canal: " + channelId,
           DiagramaUtils.encontrarHangup(ivr));
     }
 
     if("timeOut".equalsIgnoreCase(textoUsuario)) {
       throw new TimeoutNodeException(
-          "Se acabo el tiempo del nodo IngresoSimple para el canal: " + channelId,
+          "Se acabo el tiempo del nodo IngresoSimpleNode para el canal: " + channelId,
           DiagramaUtils.obtenerTarget(ivr, node));
     }
   }

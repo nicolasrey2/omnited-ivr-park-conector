@@ -32,6 +32,11 @@ public class IvrTimerService {
     log.debug("Timer seteado para {} con duración {}", key, duration);
   }
 
+  public boolean hasTimer(String key) {
+    ScheduledFuture<?> future = timers.get(key);
+    return future != null && !future.isDone();
+  }
+
   public void cancelTimer(String key) {
     Optional.ofNullable(timers.remove(key))
         .ifPresent(f -> {
