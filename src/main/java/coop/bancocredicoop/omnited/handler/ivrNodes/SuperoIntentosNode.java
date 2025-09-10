@@ -19,7 +19,7 @@ public class SuperoIntentosNode implements NodeHandler {
 
   @Override
   public String handle(JsonNode ivrLimpio, JsonNode nodo, String channelId, String textoUsuario) {
-    int cantidadReintentosMax = nodo.get("data").get("cantidadReintentos").asInt();
+    int cantidadReintentosMax = nodo.get("data").get("cantReintentosMax").asInt();
 
     int cantidadReintentosActual = getCantidadReintentosActual(channelId);
 

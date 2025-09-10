@@ -2,6 +2,7 @@ package coop.bancocredicoop.omnited.handler.ivrNodes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.exceptions.TimeoutNodeException;
+import coop.bancocredicoop.omnited.handler.ivrNodes.base.AbstractSalidaNode;
 import coop.bancocredicoop.omnited.messages.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.IvrTimerService;
 import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaProcessor;
@@ -21,7 +22,6 @@ public class OpcionMenuNode extends AbstractSalidaNode {
   private static final Logger log = LoggerFactory.getLogger(OpcionMenuNode.class);
 
   private static final String CHANNEL_SELECTED_HANDLER = "channelSelectedHandler:";
-
   private final IvrTimerService timerService;
   private final RedisService redisService;
   private final RetryService retryService;
@@ -46,14 +46,6 @@ public class OpcionMenuNode extends AbstractSalidaNode {
           "Se acabo el tiempo del nodo salidaDigitMenu",
           DiagramaUtils.encontrarHangup(ivr));
     }
-
-    //TODO ver de cambiar esto al playback finished
-    int ttlTotal = node.get("data").get("ttlTotal").asInt();
-
-    timerService.setTimer(channelId + ":total", Duration.ofSeconds(ttlTotal), () -> {
-      log.info("Timeout total en salidaDigitMenu {}", channelId);
-      diagramaProcessor.procesarMensaje(ivr, channelId, "timeOut");
-    });
   }
 
   @Override
@@ -88,16 +80,20 @@ public class OpcionMenuNode extends AbstractSalidaNode {
     log.info("se recupera y borra de la cache el handler: {} en evento onPlaybackfinished", selectedHandler);
 
     if (selectedHandler == null) {
+      int ttlTotal = node.get("data").get("ttlTotal").asInt();
+
+      timerService.setTimer(channelId + ":total", Duration.ofSeconds(ttlTotal), () -> {
+        log.info("Timeout total en salidaDigitMenu {}", channelId);
+        diagramaProcessor.procesarMensaje(ivr, channelId, "timeOut");
+      });
       return null;
     }
-
-    timerService.cancelTimer(channelId + ":total");
 
     return DiagramaUtils.buscarEdgePorHandle(ivr, node, selectedHandler);
   }
 
   private String findFetchHandler(JsonNode nodo, String textoUsuario, String channelId) {
-    JsonNode options = nodo.get("optionsList");
+    JsonNode options = nodo.get("data").get("optionsList");
     if (options == null || !options.isArray()) {
       log.error("Las opciones son nulas o estan vacias");
       return null;

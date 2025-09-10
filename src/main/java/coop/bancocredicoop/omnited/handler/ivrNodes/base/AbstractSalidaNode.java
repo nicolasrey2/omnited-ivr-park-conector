@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.handler.ivrNodes;
+package coop.bancocredicoop.omnited.handler.ivrNodes.base;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import coop.bancocredicoop.omnited.exceptions.TimeoutNodeException;

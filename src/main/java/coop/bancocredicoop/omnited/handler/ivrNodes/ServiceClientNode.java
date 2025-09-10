@@ -98,14 +98,14 @@ public class ServiceClientNode implements NodeHandler {
   }
 
   /**
-   * Método para obtener queryParams resuelto.
+   * obtener queryParams resuelto.
    */
   private Map<String, String> getQueryParams(JsonNode data, String channelId) {
     return getJsonNodeAsMapWithRedisVars(data.get("queryParams"), channelId);
   }
 
   /**
-   * Método para obtener body resuelto.
+   * obtener body resuelto.
    */
   private Map<String, String> getBodyParams(JsonNode data, String channelId) {
     return getJsonNodeAsMapWithRedisVars(data.get("body"), channelId);
