@@ -35,15 +35,14 @@ public class TiempoEsperaNode implements NodeHandler {
       log.info("[{}] - Se recibio un evento, pero aun se esta en la espera de tiempoEspera", channelId);
       return null;
     }
-
-    JsonNode data   = ivr.get("data");
+    JsonNode data   = nodo.get("data");
     int ttlTotal    = data.get("ttlTotal").asInt();
 
     timerService.setTimer(timerKey, Duration.ofSeconds(ttlTotal), () -> {
       log.info("[{}] - Timeout finalizado en tiempoEspera", channelId);
       diagramaProcessor.procesarMensaje(ivr, channelId, "timeOutTiempoEsperaNode");
     });
-    log.info("[{}] - Se seteo un timer con ttl: {}", channelId, ttlTotal);
+    log.info("[{}] - Se seteo un timer en tiempoEspera con ttl: {}", channelId, ttlTotal);
     return null;
   }
 }

@@ -28,11 +28,11 @@ public class SuperoIntentosNode implements NodeHandler {
 
     if (cantidadReintentosActual < cantidadReintentosMax) {
       log.info("aun no supero la cantidad de reintentos el canal: {}", channelId);
-      return DiagramaUtils.buscarEdgePorHandle(ivrLimpio, nodo, "noSupero");
+      return DiagramaUtils.buscarEdgePorHandle(ivrLimpio, nodo, "NO_SUPERO");
     }
 
     log.info("el canal: {} supero la cantidad de reintentos", channelId);
-    return DiagramaUtils.buscarEdgePorHandle(ivrLimpio, nodo, "siSupero");
+    return DiagramaUtils.buscarEdgePorHandle(ivrLimpio, nodo, "SI_SUPERO");
   }
 
   private int getCantidadReintentosActual(String channelId) {

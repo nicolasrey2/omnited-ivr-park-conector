@@ -31,6 +31,7 @@
         "id": "3",
         "type": "servCliente",
         "data": {
+          "type": "REST",
           "url": "http://sesb2303ax/listacandidatos-creditos-txt/rest/api/v1/listacandidatos/F/nrodoc/{dni}",
           "method": "GET",
           "headers": {
@@ -77,6 +78,27 @@
         }
       },
       {
+        "id": "100",
+        "type": "superoIntentos",
+        "data": {
+          "cantReintentosMax": "3"
+        }
+      },
+      {
+        "id": "101",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Usted ha superado los reintentos, luego de la finalizacion de este audio tendra una espera de 5 segundos y luego se cortara la comunicacion"
+        }
+      },
+      {
+        "id": "102",
+        "type": "tiempoEspera",
+        "data": {
+          "ttlTotal": 5
+        }
+      },
+      {
         "id": "5",
         "type": "opcionMenu",
         "data": {
@@ -85,6 +107,13 @@
           "optionsList": [
 
           ]
+        }
+      },
+      {
+        "id": "10",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Usted ha seleccionado una opción valida."
         }
       },
       {
@@ -132,43 +161,75 @@
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "Gestión de Claves",
-        "target": "hangup",
-        "id": "xy-edge__4-Gestión de Claves-hangup"
+        "target": "10",
+        "id": "xy-edge__4-Gestión de Claves-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "Cuentas",
-        "target": "hangup",
-        "id": "xy-edge__4-Cuentas-hangup"
+        "target": "10",
+        "id": "xy-edge__4-Cuentas-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "Tarjetas",
-        "target": "hangup",
-        "id": "xy-edge__4-Tarjetas-hangup"
+        "target": "10",
+        "id": "xy-edge__4-Tarjetas-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "Banca Personal Internet",
-        "target": "hangup",
-        "id": "xy-edge__4-Banca Personal Internet-hangup"
+        "target": "10",
+        "id": "xy-edge__4-Banca Personal Internet-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "otro",
+        "target": "10",
+        "id": "xy-edge__4-otro-10"
+      },
+      {
+        "type": "smoothstep",
+        "source": "10",
         "target": "hangup",
-        "id": "xy-edge__4-otro-hangup"
+        "id": "xy-edge__10-hangup"
       },
       {
         "type": "smoothstep",
         "source": "4",
         "sourceHandle": "ERROR",
+        "target": "100",
+        "id": "xy-edge__4-ERROR-100"
+      },
+      {
+        "type": "smoothstep",
+        "source": "100",
+        "sourceHandle": "NO_SUPERO",
+        "target": "4",
+        "id": "xy-edge__100-NO_SUPERO-4"
+      },
+      {
+        "type": "smoothstep",
+        "source": "100",
+        "sourceHandle": "SI_SUPERO",
+        "target": "101",
+        "id": "xy-edge__100-SI_SUPERO-101"
+      },
+      {
+        "type": "smoothstep",
+        "source": "101",
+        "target": "102",
+        "id": "xy-edge__101-102"
+      },
+      {
+        "type": "smoothstep",
+        "source": "102",
         "target": "hangup",
-        "id": "xy-edge__4-ERROR-hangup"
+        "id": "xy-edge__102-hangup"
       }
     ]
   }
