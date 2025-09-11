@@ -50,7 +50,7 @@ public class RestClient {
         headersMap.forEach(headers::add);
       }
 
-      // 3️⃣ Crear HttpEntity según el método
+      // 3️⃣ Crear HttpEntity según el métodohttp
       HttpMethod httpMethod = HttpMethod.resolve(method.toUpperCase());
       if (httpMethod == null) {
         throw new IllegalArgumentException("Método HTTP no soportado: " + method);

@@ -50,7 +50,7 @@ public class OpcionMenuNode extends AbstractSalidaNode {
 
   @Override
   protected String primerOutput(JsonNode nodo, String channelId) {
-    String textoSinVars = nodo.get("data").get("text").asText();
+    String textoSinVars = nodo.get("data").get("texto").asText();
     String texto = variableResolver.resolve(textoSinVars, channelId);
     log.info("Texto: {}", texto);
     return texto;
@@ -59,8 +59,11 @@ public class OpcionMenuNode extends AbstractSalidaNode {
   @Override
   protected void logicaAnteDtmfMientrasPlayback(JsonNode node, String channelId, String digit) {
     String safeDigit = digit == null ? "" : digit.trim();
+    log.error("LLEGO ACA SAFEDIGIT: {}", safeDigit);
     String selectedHandler = findFetchHandler(node, safeDigit, channelId);
     log.info("Se escribe el handler: {}", selectedHandler);
+    log.error("Se escribe el handler: {}", selectedHandler);
+
     redisService.set(CHANNEL_SELECTED_HANDLER + channelId, selectedHandler);
   }
 
@@ -98,17 +101,19 @@ public class OpcionMenuNode extends AbstractSalidaNode {
       log.error("Las opciones son nulas o estan vacias");
       return null;
     }
-
+    log.error("LLEGO A FINDFETCH");
     for (JsonNode option : options) {
+      log.error("En el for para {}", option.asText());
       if (option.get("id").asText().equals(textoUsuario)) {
         retryService.clearRetries(channelId);
-        return option.get("text").asText();
+        return option.get("texto").asText();
       }
     }
 
-    log.info("no se encontró opción para input = {}, retornando 'error' como handler", textoUsuario);
+    String ERROR_HANDLER = "ERROR";
+    log.info("no se encontró opción para input = {}, retornando '{}' como handler", textoUsuario, ERROR_HANDLER);
     retryService.handleRetries(channelId, TTL_RETRIES);
-    return "error";
+    return ERROR_HANDLER;
   }
 
 

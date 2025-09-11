@@ -18,8 +18,8 @@ import java.util.*;
 @Component("servCliente")
 public class ServiceClientNode implements NodeHandler {
   private static final Logger log = LoggerFactory.getLogger(ServiceClientNode.class);
-  private final int TTS_REINTENTOS = 35;
-  private final int TTS_VARIABLES = 300;
+  private final int TTL_REINTENTOS = 35;
+  private final int TTL_VARIABLES = 300;
 
   private final RedisService redisService;
   private final RestClient restClient;
@@ -45,7 +45,10 @@ public class ServiceClientNode implements NodeHandler {
     String method = data.has("method") ? data.get("method").asText() : null;
 
     String url = data.has("url") ? data.get("url").asText() : null;
-    Map<String, String> pathParams = getPathParams(data, channelId);
+    String urlConVars = variableResolver.resolve(url, channelId);
+    log.info("url resuelta: {} {}", method, urlConVars);
+    Map<String, String> pathParams = new HashMap<>();
+    //Map<String, String> pathParams = getPathParams(data, channelId);
 
     Map<String, String> queryParams = getQueryParams(data, channelId);
     Map<String, String> body        = getBodyParams(data, channelId);
@@ -54,11 +57,11 @@ public class ServiceClientNode implements NodeHandler {
     List<Integer> correctStatues = getCorrectStates(data);
 
     // Llamar RestClient
-    ResponseEntity<String> response = restClient.send(url, method, queryParams, headersMap, pathParams, body);
-    log.info("Respuesta del endpoint {}: {}", url, response.getBody());
+    ResponseEntity<String> response = restClient.send(urlConVars, method, queryParams, headersMap, pathParams, body);
+    log.info("Respuesta del endpoint {}: {}", urlConVars, response.getBody());
 
     if (! correctStatues.contains(response.getStatusCodeValue())) { // error
-      log.info("Error al consultar el endpoint {}: cod: {}; body: {}", url,
+      log.info("Error al consultar el endpoint {}: cod: {}; body: {}", urlConVars,
           response.getStatusCodeValue(), response.getBody());
 
       for (String variable : pathParams.keySet()) {
@@ -66,8 +69,8 @@ public class ServiceClientNode implements NodeHandler {
         log.info("Borrada variable {} de Redis para canal {}", variable, channelId);
       }
 
-      retryService.handleRetries(channelId, TTS_REINTENTOS);
-      String nodoError = DiagramaUtils.buscarEdgePorHandle(ivr, node, "error");
+      retryService.handleRetries(channelId, TTL_REINTENTOS);
+      String nodoError = DiagramaUtils.buscarEdgePorHandle(ivr, node, "ERROR");
       if (nodoError == null) {
         log.error("No se encontro nodo con handler error");
         nodoError = DiagramaUtils.encontrarHangup(ivr);
@@ -77,7 +80,7 @@ public class ServiceClientNode implements NodeHandler {
 
     retryService.clearRetries(channelId);
     setVars(channelId, response.getBody(), data.get("variablesASetear"));
-    return DiagramaUtils.buscarEdgePorHandle(ivr, node, "ok");
+    return DiagramaUtils.buscarEdgePorHandle(ivr, node, "OK");
   }
 
 
@@ -130,7 +133,7 @@ public class ServiceClientNode implements NodeHandler {
         Object valor = JsonPath.read(responseBody, jsonPath);
 
         if (valor != null) {
-          redisService.set(nombreVariable + ":" + channelId, valor.toString(), TTS_VARIABLES);
+          redisService.set(nombreVariable + ":" + channelId, valor.toString(), TTL_VARIABLES);
           log.info("Se seteó la variable: {}, con el valor: {}", nombreVariable, valor);
         } else {
           log.error("No se encontró valor para la variable {} con JSONPath {}", nombreVariable, jsonPath);

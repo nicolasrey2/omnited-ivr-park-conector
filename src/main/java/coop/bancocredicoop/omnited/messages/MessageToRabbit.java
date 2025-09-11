@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageToRabbit {
-  private Logger log = LoggerFactory.getLogger(MessageToRabbit.class);
+  private static final Logger log = LoggerFactory.getLogger(MessageToRabbit.class);
   private final ObjectMapper objectMapper;
   private final RabbitSenderService rabbitSenderService;
 

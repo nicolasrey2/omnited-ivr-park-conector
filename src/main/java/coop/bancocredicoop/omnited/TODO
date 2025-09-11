@@ -1,10 +1,10 @@
-0 -> testear si no se rompio nada al hacer el refactor
+-1 -> cambiar busqueda por source handler en digitMenu, que utilice ids en vez de texto
 
-1 -> desarrollar nodos del trello (nodo espera y nodo consultaHorarios)
+0 -> analizar que se quiere en el nodo de derivacionOperador
 
-2 -> cambiar rest node a -> rest/soup node
+1 -> cambiar rest node a -> rest/soup node
 
-3 -> comenzar a desarrollar json de nodos ivr y testear (mucho)
+2 -> comenzar a desarrollar json de nodos ivr y testear (mucho)
 
 
 testear placeholders {nombre}, {apellidoRazonSocial}, {dni} en queryParams y body.

@@ -27,11 +27,7 @@ public class RabbitListenerService {
       DiagramaStore diagramaStore
   ) {
 
-    // TODO definir bien estas keys
-
-    // para actualizar el diagrama del ivr
     handlers.put("actualizarIVR", new IvrUpdaterHandler(jsonCleaningService, diagramaStore));
-
   }
 
   /**

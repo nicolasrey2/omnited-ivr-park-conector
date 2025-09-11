@@ -1,0 +1,175 @@
+{
+  "idIVR": 1,
+  "ivrPayload": {
+    "nodes": [
+      {
+        "id": "start-node",
+        "type": "inicio",
+        "data": {
+          "label": "Inicio Bot"
+        }
+      },
+      {
+        "id": "1",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Bienvenido al banco credicoop"
+        }
+      },
+      {
+        "id": "2",
+        "type": "ingresoSimple",
+        "data": {
+          "texto": "Por favor ingrese su número de documento",
+          "ingreso": "dni",
+          "cantMaxDigitos": 10,
+          "ttlInterDigito": 3,
+          "ttlPrimerDigito": 10
+        }
+      },
+      {
+        "id": "3",
+        "type": "servCliente",
+        "data": {
+          "url": "http://sesb2303ax/listacandidatos-creditos-txt/rest/api/v1/listacandidatos/F/nrodoc/{dni}",
+          "method": "GET",
+          "headers": {
+            "Accept": "application/json"
+          },
+          "correctStates": [
+            200,
+            201
+          ],
+          "variablesASetear": {
+            "nombre": "$.candidatos[0].nombre",
+            "apellidoRazonSocial" : "$.candidatos[0].apellidoRazonSocial"
+          }
+        }
+      },
+      {
+        "id": "4",
+        "type": "opcionMenu",
+        "data": {
+          "ttlTotal": "30",
+          "texto": "Para Gestión de Claves, Ingrese 0. Para operar con cuentas, Ingrese 1. Para operar con tarjetas, activar o denunciar el robo o extravío de las mismas y/o su Celular, Ingrese 2. Para asistencia por Banca Personal Internet, Inversiones, Seguros, Billetera Modo , Programa de puntos Credicoop o Aerolíneas Plus, Ingrese 3. Por otras consultas de atención con operador, Ingrese 4",
+          "optionsList": [
+            {
+              "id": 0,
+              "texto": "Gestión de Claves"
+            },
+            {
+              "id": 1,
+              "texto": "Cuentas"
+            },
+            {
+              "id": 2,
+              "texto": "Tarjetas"
+            },
+            {
+              "id": 3,
+              "texto": "Banca Personal Internet"
+            },
+            {
+              "id": 4,
+              "texto": "otro"
+            }
+          ]
+        }
+      },
+      {
+        "id": "5",
+        "type": "opcionMenu",
+        "data": {
+          "ttlTotal": "10",
+          "texto": "",
+          "optionsList": [
+
+          ]
+        }
+      },
+      {
+        "id": "hangup",
+        "type": "hangup",
+        "data": {
+
+        }
+      }
+    ],
+    "edges": [
+      {
+        "type": "smoothstep",
+        "source": "start-node",
+        "target": "1",
+        "id": "xy-edge__start-node-1"
+      },
+      {
+        "type": "smoothstep",
+        "source": "1",
+        "target": "2",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "target": "3",
+        "id": "xy-edge__2-3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "sourceHandle": "OK",
+        "target": "4",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "sourceHandle": "ERROR",
+        "target": "hangup",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "Gestión de Claves",
+        "target": "hangup",
+        "id": "xy-edge__4-Gestión de Claves-hangup"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "Cuentas",
+        "target": "hangup",
+        "id": "xy-edge__4-Cuentas-hangup"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "Tarjetas",
+        "target": "hangup",
+        "id": "xy-edge__4-Tarjetas-hangup"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "Banca Personal Internet",
+        "target": "hangup",
+        "id": "xy-edge__4-Banca Personal Internet-hangup"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "otro",
+        "target": "hangup",
+        "id": "xy-edge__4-otro-hangup"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "ERROR",
+        "target": "hangup",
+        "id": "xy-edge__4-ERROR-hangup"
+      }
+    ]
+  }
+}

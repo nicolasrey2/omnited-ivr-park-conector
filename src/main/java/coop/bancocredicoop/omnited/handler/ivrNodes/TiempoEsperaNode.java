@@ -7,6 +7,7 @@ import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaProcessor;
 import coop.bancocredicoop.omnited.service.ivr.diagram.DiagramaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -18,7 +19,7 @@ public class TiempoEsperaNode implements NodeHandler {
   private final IvrTimerService timerService;
   private final DiagramaProcessor diagramaProcessor;
 
-  public TiempoEsperaNode(IvrTimerService timerService, DiagramaProcessor diagramaProcessor) {
+  public TiempoEsperaNode(IvrTimerService timerService, @Lazy DiagramaProcessor diagramaProcessor) {
     this.timerService = timerService;
     this.diagramaProcessor = diagramaProcessor;
   }

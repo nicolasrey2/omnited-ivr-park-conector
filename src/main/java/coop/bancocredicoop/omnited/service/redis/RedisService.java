@@ -115,7 +115,7 @@ public class RedisService {
     }
 
     /**
-     * Guarda un campo en un Hash con TTL sobre todo el Hash.
+     * Guarda un campo en un Hash con TTL sobre todoel Hash.
      */
     public void hset(String from, String varName, String valor) {
         String hashKey = "vars:" + from;
@@ -131,7 +131,7 @@ public class RedisService {
     }
 
     /**
-     * Borra TODO el estado de ese usuario (todo el Hash).
+     * BorraTODO el estado de ese usuario (todoel Hash).
      */
     public void deleteHash(String from) {
         redisTemplate.delete("vars:" + from);

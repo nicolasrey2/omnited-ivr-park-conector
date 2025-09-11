@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 @Component
 public class AriMessageMapper {
+  private static final Logger log = LoggerFactory.getLogger(AriMessageMapper.class);
   private final IvrService ivrService;
-  private final Logger log = LoggerFactory.getLogger(AriMessageMapper.class);
 
   public AriMessageMapper(@Lazy IvrService ivrService) {
     this.ivrService = ivrService;

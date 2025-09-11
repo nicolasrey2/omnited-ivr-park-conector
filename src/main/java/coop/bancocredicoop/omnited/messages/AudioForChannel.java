@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 public class AudioForChannel implements  CanalMensajeria {
   private static final Logger log = LoggerFactory.getLogger(AudioForChannel.class);
 
-  private PiperTtsService piperTtsService;
-  private AriConnector ariConnector;
+  private final PiperTtsService piperTtsService;
+  private final AriConnector ariConnector;
 
   public AudioForChannel(PiperTtsService piperTtsService, AriConnector ariConnector) {
     this.piperTtsService = piperTtsService;
