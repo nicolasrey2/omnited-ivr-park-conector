@@ -59,11 +59,8 @@ public class OpcionMenuNode extends AbstractSalidaNode {
   @Override
   protected void logicaAnteDtmfMientrasPlayback(JsonNode node, String channelId, String digit) {
     String safeDigit = digit == null ? "" : digit.trim();
-    log.error("LLEGO ACA SAFEDIGIT: {}", safeDigit);
     String selectedHandler = findFetchHandler(node, safeDigit, channelId);
     log.info("Se escribe el handler: {}", selectedHandler);
-    log.error("Se escribe el handler: {}", selectedHandler);
-
     redisService.set(CHANNEL_SELECTED_HANDLER + channelId, selectedHandler);
   }
 
@@ -101,9 +98,7 @@ public class OpcionMenuNode extends AbstractSalidaNode {
       log.error("Las opciones son nulas o estan vacias");
       return null;
     }
-    log.error("LLEGO A FINDFETCH");
     for (JsonNode option : options) {
-      log.error("En el for para {}", option.asText());
       if (option.get("id").asText().equals(textoUsuario)) {
         retryService.clearRetries(channelId);
         return option.get("texto").asText();
