@@ -17,20 +17,26 @@ public class ConsultaHorarioNode implements NodeHandler {
 
   @Override
   public String handle(JsonNode ivr, JsonNode nodo, String channelId, String textoUsuario) {
-    JsonNode data = ivr.get("data");
-    LocalTime horarioInicial = LocalTime.parse(data.get("horarioInicial").asText());
-    LocalTime horarioFinal   = LocalTime.parse(data.get("horarioFinal").asText());
-    LocalTime horaActual     = LocalTime.now();
+    try {
+      JsonNode data = nodo.get("data");
+      LocalTime horarioInicial = LocalTime.parse(data.get("horarioInicial").asText());
+      LocalTime horarioFinal = LocalTime.parse(data.get("horarioFinal").asText());
+      LocalTime horaActual = LocalTime.now();
 
-    log.debug("[{}] ConsultaHorarioNode: inicio={}, fin={}, actual={}", channelId, horarioInicial, horarioFinal, horaActual);
+      log.debug("[{}] ConsultaHorarioNode: inicio={}, fin={}, actual={}", channelId, horarioInicial, horarioFinal, horaActual);
 
-    if (TimeUtils.isBetween(horaActual, horarioInicial, horarioFinal)) {
-      log.info("[{}] Hora dentro de rango ({} - {}).", channelId, horarioInicial, horarioFinal);
-      return DiagramaUtils.buscarEdgePorHandle(ivr, nodo, "OK");
+      if (TimeUtils.isBetween(horaActual, horarioInicial, horarioFinal)) {
+        log.info("[{}] Hora dentro de rango ({} - {}).", channelId, horarioInicial, horarioFinal);
+        return DiagramaUtils.buscarEdgePorHandle(ivr, nodo, "OK");
+      }
+
+      log.warn("[{}] Hora fuera de rango ({} - {}). Actual={}", channelId, horarioInicial, horarioFinal, horaActual);
+      return DiagramaUtils.buscarEdgePorHandle(ivr, nodo, "ERROR");
     }
-
-    log.warn("[{}] Hora fuera de rango ({} - {}). Actual={}", channelId, horarioInicial, horarioFinal, horaActual);
-    return DiagramaUtils.buscarEdgePorHandle(ivr, nodo, "ERROR");
+    catch (Exception e) {
+      log.error(e.toString());
+      return null;
+    }
   }
 
 }

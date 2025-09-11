@@ -7,6 +7,7 @@ import coop.bancocredicoop.omnited.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -18,10 +19,11 @@ public class ConsultaFechaNode implements NodeHandler {
 
   @Override
   public String handle(JsonNode ivr, JsonNode nodo, String channelId, String textoUsuario) {
-    JsonNode data = ivr.get("data");
-    LocalDateTime fechaInicial = LocalDateTime.parse(data.get("fechaInicial").asText(), FECHA_FORMATTER);
-    LocalDateTime fechaFinal   = LocalDateTime.parse(data.get("fechaFinal").asText(), FECHA_FORMATTER);
-    LocalDateTime fechaActual  = LocalDateTime.now();
+
+    JsonNode data = nodo.get("data");
+    LocalDateTime fechaInicial = LocalDateTime.parse(data.get("diaInicial").asText(), FECHA_FORMATTER);
+    LocalDateTime fechaFinal = LocalDateTime.parse(data.get("diaFinal").asText(), FECHA_FORMATTER);
+    LocalDateTime fechaActual = LocalDateTime.now();
 
     log.debug("[{}] ConsultaFechaNode: inicio={}, fin={}, actual={}", channelId, fechaInicial, fechaFinal, fechaActual);
 
@@ -32,6 +34,7 @@ public class ConsultaFechaNode implements NodeHandler {
 
     log.warn("[{}] Fecha fuera de rango ({} - {}). Actual={}", channelId, fechaInicial, fechaFinal, fechaActual);
     return DiagramaUtils.buscarEdgePorHandle(ivr, nodo, "ERROR");
+
   }
 
 }

@@ -1,0 +1,210 @@
+{
+  "idIVR": 1,
+  "ivrPayload": {
+    "nodes": [
+      {
+        "id": "start-node",
+        "type": "inicio",
+        "data": {
+          "label": "Inicio Bot"
+        }
+      },
+      {
+        "id": "1",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Bienvenido al banco credicoop"
+        }
+      },
+      {
+        "id": "2",
+        "type": "opcionMenu",
+        "data": {
+          "ttlTotal": "10",
+          "texto": "para consulta de fecha valida, presione 0. para consulta de fecha invalida, presione 1. para consulta de horario valida, presione 2. para consulta de horario invalida, presione 3.",
+          "optionsList": [
+            {
+              "id": 0,
+              "texto": "0"
+            },
+            {
+              "id": 1,
+              "texto": "1"
+            },
+            {
+              "id": 2,
+              "texto": "2"
+            },
+            {
+              "id": 3,
+              "texto": "3"
+            }
+          ]
+        }
+      },
+      {
+        "id": "3",
+        "type": "consultaFecha",
+        "data": {
+          "diaInicial": "2025:09:11 07:00:00",
+          "diaFinal": "2025:09:11 15:00:00"
+        }
+      },
+      {
+        "id": "4",
+        "type": "consultaFecha",
+        "data": {
+          "diaInicial": "2025:09:11 07:00:00",
+          "diaFinal": "2025:09:11 12:40:00"
+        }
+      },
+      {
+        "id": "5",
+        "type": "consultaHorario",
+        "data": {
+          "horarioInicial": "07:30:00",
+          "horarioFinal": "17:00:00"
+        }
+      },
+      {
+        "id": "6",
+        "type": "consultaHorario",
+        "data": {
+          "horarioInicial": "07:30:00",
+          "horarioFinal": "12:00:00"
+        }
+      },
+      {
+        "id": "100",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Correcto horario o fecha permitido"
+        }
+      },
+      {
+        "id": "101",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Error horario o fecha no permitido"
+        }
+      },
+      {
+        "id": "hangup",
+        "type": "hangup",
+        "data": {
+
+        }
+      }
+    ],
+    "edges": [
+      {
+        "type": "smoothstep",
+        "source": "start-node",
+        "target": "1",
+        "id": "xy-edge__start-node-1"
+      },
+      {
+        "type": "smoothstep",
+        "source": "1",
+        "target": "2",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "sourceHandle": "0",
+        "target": "3",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "sourceHandle": "1",
+        "target": "4",
+        "id": "xy-edge__4"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "sourceHandle": "2",
+        "target": "5",
+        "id": "xy-edge__5"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "sourceHandle": "3",
+        "target": "6",
+        "id": "xy-edge__6"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "sourceHandle": "OK",
+        "target": "100",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "sourceHandle": "ERROR",
+        "target": "101",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "OK",
+        "target": "100",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "ERROR",
+        "target": "101",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "5",
+        "sourceHandle": "OK",
+        "target": "100",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "5",
+        "sourceHandle": "ERROR",
+        "target": "101",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "6",
+        "sourceHandle": "OK",
+        "target": "100",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "6",
+        "sourceHandle": "ERROR",
+        "target": "101",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "100",
+        "target": "hangup",
+        "id": "xy-edge__3"
+      },
+      {
+        "type": "smoothstep",
+        "source": "101",
+        "target": "hangup",
+        "id": "xy-edge__3"
+      }
+    ]
+  }
+}
