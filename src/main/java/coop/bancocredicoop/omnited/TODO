@@ -1,5 +1,3 @@
--1 -> cambiar busqueda por source handler en digitMenu, que utilice ids en vez de texto
-
 0 -> analizar que se quiere en el nodo de derivacionOperador
 
 1 -> cambiar rest node a -> rest/soup node

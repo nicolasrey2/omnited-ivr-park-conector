@@ -101,7 +101,7 @@ public class OpcionMenuNode extends AbstractSalidaNode {
     for (JsonNode option : options) {
       if (option.get("id").asText().equals(textoUsuario)) {
         retryService.clearRetries(channelId);
-        return option.get("texto").asText();
+        return textoUsuario;
       }
     }
 

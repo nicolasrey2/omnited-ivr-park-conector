@@ -160,37 +160,37 @@
       {
         "type": "smoothstep",
         "source": "4",
-        "sourceHandle": "Gestión de Claves",
+        "sourceHandle": "0",
         "target": "10",
-        "id": "xy-edge__4-Gestión de Claves-10"
+        "id": "xy-edge__4-0-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
-        "sourceHandle": "Cuentas",
+        "sourceHandle": "1",
         "target": "10",
-        "id": "xy-edge__4-Cuentas-10"
+        "id": "xy-edge__4-1-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
-        "sourceHandle": "Tarjetas",
+        "sourceHandle": "2",
         "target": "10",
-        "id": "xy-edge__4-Tarjetas-10"
+        "id": "xy-edge__4-2-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
-        "sourceHandle": "Banca Personal Internet",
+        "sourceHandle": "3",
         "target": "10",
-        "id": "xy-edge__4-Banca Personal Internet-10"
+        "id": "xy-edge__4-3-10"
       },
       {
         "type": "smoothstep",
         "source": "4",
-        "sourceHandle": "otro",
+        "sourceHandle": "4",
         "target": "10",
-        "id": "xy-edge__4-otro-10"
+        "id": "xy-edge__4-4-10"
       },
       {
         "type": "smoothstep",
