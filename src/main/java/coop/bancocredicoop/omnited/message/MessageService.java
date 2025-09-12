@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.messages;
+package coop.bancocredicoop.omnited.message;
 
 import ch.loway.oss.ari4java.generated.models.Playback;
 import coop.bancocredicoop.omnited.service.redis.RedisService;

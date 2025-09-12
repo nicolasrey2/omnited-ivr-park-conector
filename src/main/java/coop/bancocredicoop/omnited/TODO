@@ -1,12 +1,3 @@
-0 -> analizar que se quiere en el nodo de derivacionOperador
-
-1 -> cambiar rest node a -> rest/soup node
-
-2 -> comenzar a desarrollar json de nodos ivr y testear (mucho)
-
-
-testear placeholders {nombre}, {apellidoRazonSocial}, {dni} en queryParams y body.
-
 ******************************************************************************************************
 ******************************************************************************************************
 ******************************************************************************************************

@@ -3,6 +3,9 @@ package coop.bancocredicoop.omnited.service.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +36,17 @@ public class VariableResolver {
 
     matcher.appendTail(sb);
     return sb.toString();
+  }
+
+  public Set<String> getVariables(String text) {
+    Set<String> variables = new HashSet<>();
+    if (text == null) return variables;
+
+    Matcher matcher = VAR_PATTERN.matcher(text);
+    while (matcher.find()) {
+      variables.add(matcher.group(1)); // group(1) es lo que está dentro de {}
+    }
+    return variables;
   }
 }
 

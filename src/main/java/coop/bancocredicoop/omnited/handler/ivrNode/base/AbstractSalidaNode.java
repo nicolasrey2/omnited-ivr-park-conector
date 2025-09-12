@@ -1,8 +1,8 @@
-package coop.bancocredicoop.omnited.handler.ivrNodes.base;
+package coop.bancocredicoop.omnited.handler.ivrNode.base;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import coop.bancocredicoop.omnited.exceptions.TimeoutNodeException;
-import coop.bancocredicoop.omnited.messages.MessageService;
+import coop.bancocredicoop.omnited.exception.TimeoutNodeException;
+import coop.bancocredicoop.omnited.message.MessageService;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.VariableResolver;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.exceptions;
+package coop.bancocredicoop.omnited.exception;
 
 public class MishandledStateException extends RuntimeException {
   public MishandledStateException(String message) {

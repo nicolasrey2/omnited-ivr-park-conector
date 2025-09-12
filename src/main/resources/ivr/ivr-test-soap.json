@@ -1,0 +1,103 @@
+{
+  "idIVR": 2,
+  "ivrPayload": {
+    "nodes": [
+      {
+        "id": "start-node",
+        "type": "inicio",
+        "data": {
+          "label": "Inicio Bot"
+        }
+      },
+      {
+        "id": "1",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Bienvenido al banco Credicoop"
+        }
+      },
+      {
+        "id": "2",
+        "type": "ingresoSimple",
+        "data": {
+          "texto": "Por favor ingrese su DNI",
+          "ingreso": "dni",
+          "cantMaxDigitos": 8,
+          "ttlInterDigito": 3,
+          "ttlPrimerDigito": 10
+        }
+      },
+      {
+        "id": "3",
+        "type": "servCliente",
+        "data": {
+          "type": "SOAP",
+          "url": "https://sarm7001lx.bancocredicoop.coop/legacy/tools/sqlsoap_server.php?wsdl",
+          "body": "<soapenv:Envelope xmlns:soapenv=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\" xmlns:ser=\\\"http://services/\\\"><soapenv:Header/><soapenv:Body><ser:getByDNI><dni>{dni}</dni></ser:getByDNI></soapenv:Body></soapenv:Envelope>",
+          "headers": {
+            "SOAPAction": "getByDNI",
+            "Content-Type": "text/xml; charset=utf-8"
+          },
+          "correctStates": [
+            200
+          ],
+          "variablesASetear": {
+            "url": "$.getByDNIResponse.return"
+          }
+        }
+      },
+      {
+        "id": "4",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Para el DNI {dni}, la URL obtenida es {url}"
+        }
+      },
+      {
+        "id": "hangup",
+        "type": "hangup",
+        "data": {}
+      }
+    ],
+    "edges": [
+      {
+        "type": "smoothstep",
+        "source": "start-node",
+        "target": "1",
+        "id": "edge-0"
+      },
+      {
+        "type": "smoothstep",
+        "source": "1",
+        "target": "2",
+        "id": "edge-1"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "target": "3",
+        "id": "edge-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "sourceHandle": "OK",
+        "target": "4",
+        "id": "edge-3-ok"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "sourceHandle": "ERROR",
+        "target": "hangup",
+        "id": "edge-3-error"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "target": "hangup",
+        "id": "edge-4"
+      }
+    ]
+  }
+}

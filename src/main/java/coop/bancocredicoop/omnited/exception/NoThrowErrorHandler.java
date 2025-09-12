@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.exceptions;
+package coop.bancocredicoop.omnited.exception;
 
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;

@@ -1,4 +1,4 @@
-package coop.bancocredicoop.omnited.messages;
+package coop.bancocredicoop.omnited.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import coop.bancocredicoop.omnited.config.MessageOut;

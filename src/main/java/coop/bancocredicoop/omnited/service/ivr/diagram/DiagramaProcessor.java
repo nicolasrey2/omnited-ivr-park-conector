@@ -1,7 +1,7 @@
 package coop.bancocredicoop.omnited.service.ivr.diagram;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import coop.bancocredicoop.omnited.messages.CanalMensajeria;
+import coop.bancocredicoop.omnited.message.CanalMensajeria;
 import coop.bancocredicoop.omnited.service.ivr.NodeHandler;
 import coop.bancocredicoop.omnited.service.redis.RedisService;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package coop.bancocredicoop.omnited.service.restClient;
+package coop.bancocredicoop.omnited.service.client.restClient;
 
-import coop.bancocredicoop.omnited.exceptions.NoThrowErrorHandler;
+import coop.bancocredicoop.omnited.exception.NoThrowErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -24,7 +24,6 @@ public class RestClient {
   public ResponseEntity<String> send(String url, String method,
                                      Map<String, String> queryParams,
                                      Map<String, String> headersMap,
-                                     Map<String, String> pathValues,
                                      Map<String, String> bodyParams) {
 
     if (url == null || url.isEmpty()) {
@@ -42,7 +41,7 @@ public class RestClient {
         queryParams.forEach(builder::queryParam);
       }
 
-      URI uri = builder.buildAndExpand(pathValues).toUri();
+      URI uri = builder.buildAndExpand().toUri();
 
       // 2️⃣ Crear headers
       HttpHeaders headers = new HttpHeaders();
@@ -60,7 +59,7 @@ public class RestClient {
           ? new HttpEntity<>(headers)
           : new HttpEntity<>(bodyParams != null ? new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(bodyParams) : null, headers);
 
-      log.info("Ejecutando {} a {} con pathValues {} y queryParams {} y body {}", httpMethod, uri, pathValues, queryParams, bodyParams);
+      log.info("Ejecutando {} a {} con queryParams {} y body {}", httpMethod, uri, queryParams, bodyParams);
 
       // 4️⃣ Ejecutar request
       return restTemplate.exchange(uri, httpMethod, entity, String.class);
