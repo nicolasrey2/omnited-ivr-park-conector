@@ -32,8 +32,8 @@
         "type": "servCliente",
         "data": {
           "type": "SOAP",
-          "url": "https://sarm7001lx.bancocredicoop.coop/legacy/tools/sqlsoap_server.php?wsdl",
-          "body": "<soapenv:Envelope xmlns:soapenv=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\" xmlns:ser=\\\"http://services/\\\"><soapenv:Header/><soapenv:Body><ser:getByDNI><dni>{dni}</dni></ser:getByDNI></soapenv:Body></soapenv:Envelope>",
+          "url": "http://sarm7001lx.bancocredicoop.coop/legacy/tools/sqlsoap_server.php",
+          "body": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://services/\"><soapenv:Header/><soapenv:Body><ser:getByDNI><dni>{dni}</dni></ser:getByDNI></soapenv:Body></soapenv:Envelope>",
           "headers": {
             "SOAPAction": "getByDNI",
             "Content-Type": "text/xml; charset=utf-8"
@@ -42,7 +42,7 @@
             200
           ],
           "variablesASetear": {
-            "url": "$.getByDNIResponse.return"
+            "url": "$.Body.getByDNIResponse.return.[\"\"]"
           }
         }
       },

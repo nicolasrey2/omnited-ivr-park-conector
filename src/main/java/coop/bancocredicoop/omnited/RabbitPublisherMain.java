@@ -27,7 +27,7 @@ public class RabbitPublisherMain {
     RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
 
     // 🔹 Leer el JSON crudo desde resources (payload.json)
-    InputStream is = RabbitPublisherMain.class.getClassLoader().getResourceAsStream("ivr/ivr-test.json");
+    InputStream is = RabbitPublisherMain.class.getClassLoader().getResourceAsStream("ivr/ivr-test-soap.json");
     if (is == null) {
       throw new IllegalStateException("No se encontró payload.json en resources");
     }
