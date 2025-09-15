@@ -1,0 +1,123 @@
+{
+  "idIVR": 1,
+  "ivrPayload": {
+    "nodes": [
+      {
+        "id": "start-node",
+        "type": "inicio",
+        "data": {
+          "label": "Inicio Bot"
+        }
+      },
+      {
+        "id": "1",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Bienvenido al banco credicoop"
+        }
+      },
+      {
+        "id": "2",
+        "type": "ingresoSimple",
+        "data": {
+          "texto": "Por favor ingrese su edad",
+          "ingreso": "edad",
+          "cantMaxDigitos": 2,
+          "ttlInterDigito": 3,
+          "ttlPrimerDigito": 10
+        }
+      },
+      {
+        "id": "3",
+        "type": "ingresoSimple",
+        "data": {
+          "texto": "Por favor ingrese su número de telefono",
+          "ingreso": "nroTelefono",
+          "cantMaxDigitos": 10,
+          "ttlInterDigito": 3,
+          "ttlPrimerDigito": 10
+        }
+      },
+      {
+        "id": "4",
+        "type": "logicaCondicional",
+        "data": {
+          "condicional": "{edad} >= 18 and {nroTelefono} != null"
+        }
+      },
+      {
+        "id": "5",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Usted ha calificado"
+        }
+      },
+      {
+        "id": "6",
+        "type": "respuestaCompuesta",
+        "data": {
+          "texto": "Usted no ha calificado a este beneficio"
+        }
+      },
+      {
+        "id": "hangup",
+        "type": "hangup",
+        "data": {
+
+        }
+      }
+    ],
+    "edges": [
+      {
+        "type": "smoothstep",
+        "source": "start-node",
+        "target": "1",
+        "id": "xy-edge__start-node-1"
+      },
+      {
+        "type": "smoothstep",
+        "source": "1",
+        "target": "2",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "2",
+        "target": "3",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "3",
+        "target": "4",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "TRUE",
+        "target": "5",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "4",
+        "sourceHandle": "FALSE",
+        "target": "6",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "5",
+        "target": "hangup",
+        "id": "xy-edge__1-2"
+      },
+      {
+        "type": "smoothstep",
+        "source": "6",
+        "target": "hangup",
+        "id": "xy-edge__1-2"
+      }
+    ]
+  }
+}
