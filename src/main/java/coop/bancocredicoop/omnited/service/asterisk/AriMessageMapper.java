@@ -1,6 +1,7 @@
 package coop.bancocredicoop.omnited.service.asterisk;
 
 import ch.loway.oss.ari4java.generated.models.*;
+import coop.bancocredicoop.omnited.service.statistic.StatisticReporter;
 import coop.bancocredicoop.omnited.service.ivr.IvrService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -11,9 +12,11 @@ import org.slf4j.LoggerFactory;
 public class AriMessageMapper {
   private static final Logger log = LoggerFactory.getLogger(AriMessageMapper.class);
   private final IvrService ivrService;
+  private final StatisticReporter statisticReporter;
 
-  public AriMessageMapper(@Lazy IvrService ivrService) {
+  public AriMessageMapper(@Lazy IvrService ivrService, StatisticReporter statisticReporter) {
     this.ivrService = ivrService;
+    this.statisticReporter = statisticReporter;
   }
 
   public void mapMessage(Message message) {
@@ -23,7 +26,9 @@ public class AriMessageMapper {
     log.info(message.getType());
     switch (message.getType()) {
       case "StasisStart":
-        handleStasisStart((StasisStart) message);
+        StasisStart stasisStartMessage = (StasisStart) message;
+        statisticReporter.initSession(stasisStartMessage);
+        //handleStasisStart(stasisStartMessage);
         break;
 
       case "ChannelDtmfReceived":
@@ -36,6 +41,16 @@ public class AriMessageMapper {
         PlaybackFinished playbackFinished = (PlaybackFinished) message;
         log.info("Playback finished por evento: {}", playbackFinished.getPlayback().getId());
         handlePlaybackFinished(playbackFinished);
+        break;
+
+      case "StasisEnd":
+        StasisEnd stasisEndMessage = (StasisEnd) message;
+        statisticReporter.endSession(stasisEndMessage);
+        break;
+
+      case "ChannelHangupRequest":
+        ChannelHangupRequest channelHangupMessage = (ChannelHangupRequest) message;
+        statisticReporter.hangUpRequest(channelHangupMessage);
         break;
 
       default:

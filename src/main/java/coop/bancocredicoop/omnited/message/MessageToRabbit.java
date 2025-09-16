@@ -10,11 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageToRabbit {
   private static final Logger log = LoggerFactory.getLogger(MessageToRabbit.class);
-  private final ObjectMapper objectMapper;
   private final RabbitSenderService rabbitSenderService;
 
-  public MessageToRabbit(ObjectMapper objectMapper, RabbitSenderService rabbitSenderService) {
-    this.objectMapper = objectMapper;
+  public MessageToRabbit(RabbitSenderService rabbitSenderService) {
     this.rabbitSenderService = rabbitSenderService;
   }
 
