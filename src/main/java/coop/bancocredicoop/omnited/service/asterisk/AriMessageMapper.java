@@ -28,7 +28,7 @@ public class AriMessageMapper {
       case "StasisStart":
         StasisStart stasisStartMessage = (StasisStart) message;
         statisticReporter.initSession(stasisStartMessage);
-        //handleStasisStart(stasisStartMessage);
+        handleStasisStart(stasisStartMessage);
         break;
 
       case "ChannelDtmfReceived":

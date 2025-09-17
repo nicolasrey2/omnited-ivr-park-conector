@@ -18,6 +18,10 @@ public class DerivacionOperadorNode extends AbstractSalidaNode {
 
   @Override
   protected void preHandleTasks(JsonNode ivr, JsonNode node, String channelId, String textoUsuario) {
+    String idHabilidad = node.get("data").get("idHabilidad").asText();
+    /// parkear llamada
+
+    /// enviar a otro servidor notificacion de parkeo
 
   }
 

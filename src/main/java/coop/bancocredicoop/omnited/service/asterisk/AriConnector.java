@@ -2,6 +2,8 @@ package coop.bancocredicoop.omnited.service.asterisk;
 
 import ch.loway.oss.ari4java.ARI;
 import ch.loway.oss.ari4java.AriVersion;
+import ch.loway.oss.ari4java.generated.ari_8_0_0.models.Bridge_impl_ari_8_0_0;
+import ch.loway.oss.ari4java.generated.models.Bridge;
 import ch.loway.oss.ari4java.generated.models.Message;
 import ch.loway.oss.ari4java.generated.models.Playback;
 import ch.loway.oss.ari4java.tools.AriConnectionEvent;
@@ -125,6 +127,33 @@ public class AriConnector {
     }
   }
 
+  public void addChannelToBridge(String channelId, String bridgeId) {
+    try {
+      ari.bridges().addChannel(bridgeId, channelId).execute();
+    } catch (RestException e) {
+      log.error("Error agregando el canal: {}, en el bridgeId: {}. Error: {}", channelId, bridgeId, e.getMessage());
+    }
+  }
+
+  public void removeChannelToBridge(String channelId, String bridgeId) {
+    try {
+      ari.bridges().removeChannel(bridgeId, channelId).execute();
+    } catch (RestException e) {
+      log.error("Error removiendo el canal: {}, del bridgeId: {}. Error: {}", channelId, bridgeId, e.getMessage());
+    }
+  }
+
+  public Bridge createBridge(String type) {
+    try {
+      return ari.bridges()
+          .create()
+          .setType(type)
+          .execute();
+    } catch (RestException e) {
+      log.error("Error creando el parkingBridge. Error: {}", e.getMessage());
+    }
+    return null;
+  }
 
   @PreDestroy
   public void shutdown() {
